@@ -31,29 +31,15 @@
         "name": "국민카드(*1321)",
         "amount": 20111270,
         "type": "card",
-        "dueDateStart": "2021-03-20T15:00:00.000Z",
-        "dueDateEnd": "2021-03-21T14:59:59.000Z"
+        "dueDateStart": "2021-02-20T15:00:00.000Z",
+        "dueDateEnd": "2021-02-21T14:59:59.000Z"
     },
     {
         "name": "가스요금 납부기한",
         "amount": 630660,
         "type": "utilityBill",
-        "dueDateStart": "2021-03-20T15:00:00.000Z",
-        "dueDateEnd": "2021-03-21T14:59:59.000Z"
-    },
-    {
-        "name": "부가세 납부기한",
-        "amount": 5020000,
-        "type": "tax",
-        "dueDateStart": "2021-03-22T15:00:00.000Z",
-        "dueDateEnd": "2021-03-23T14:59:59.000Z"
-    },
-    {
-        "name": "거래대금 미지급",
-        "amount": 10023000,
-        "type": "tradePayable",
-        "dueDateStart": "2021-03-25T15:00:00.000Z",
-        "dueDateEnd": "2021-03-26T14:59:59.000Z"
+        "dueDateStart": "2021-02-20T15:00:00.000Z",
+        "dueDateEnd": "2021-02-21T14:59:59.000Z"
     },
 
     {

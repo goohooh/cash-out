@@ -1,4 +1,4 @@
-import { useState } from "react";
+import Expenditure from "../../entity/expenditure";
 import styles from "./_calendar.module.css";
 
 const months: string[] = [
@@ -16,13 +16,16 @@ const months: string[] = [
   "12월",
 ];
 
+interface CalendarProps {
+  date: Date;
+  setDate: Function;
+  data: Expenditure[];
+}
 
-const Calendar = () => {
-  const [date, setDate] = useState(() => {
-    const date = new Date();
-    date.setDate(1);
-    return date;
-  });
+
+const Calendar = (props: CalendarProps) => {
+  const { date, setDate, data }: CalendarProps = props;
+  console.log(data);
 
   const onClickPrevMonth = () => {
     const selectedMonth = date.getMonth();
