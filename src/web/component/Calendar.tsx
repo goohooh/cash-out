@@ -1,9 +1,5 @@
 import React from "react";
-import {
-  eachDayOfInterval,
-  startOfDay,
-  endOfDay,
-} from "date-fns";
+import { eachDayOfInterval } from "date-fns";
 
 import Expenditure from "../../entity/expenditure";
 
@@ -156,7 +152,7 @@ const Calendar = ({ date, setDate, data, setSelectedDate, selectedDate, toggle, 
           );
           const key = generateKeyByMonthDate(day);
 
-          return <CalendarCell key={`current-${date}`}
+          return <CalendarCell key={key}
                                isToday={isToday}
                                date={day}
                                data={groupedData[key]}

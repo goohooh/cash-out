@@ -18,7 +18,7 @@ function App() {
     return selectedDate
       ? expenditures.filter(exp => exp.dueDateStart.getDate() <= selectedDate)
       : [];
-  }, [selectedDate]);
+  }, [selectedDate, expenditures]);
 
   const [date, setDate] = useState(() => {
     const d = new Date();
@@ -36,7 +36,7 @@ function App() {
       .then(expenditures => {
         setExpenditures(expenditures)
       });
-  }, [date]);
+  }, [expenditureRepo, date]);
 
   return (
     <div className="App">
