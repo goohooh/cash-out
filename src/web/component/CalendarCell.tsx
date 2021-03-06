@@ -1,25 +1,25 @@
-import Expenditure from "../../entity/expenditure";
-import Schedule from "./Schedule";
+import Schedule from "../../entity/schedule";
+import ScheduleChip from "./ScheduleChip";
 
 interface Props {
     isToday: boolean;
-    month: number;
-    date: number;
-    data?: Expenditure[];
+    date: Date;
+    data?: Schedule[];
+    onClick?: () => void;
 }
 
 const CalendarCell = ({
     isToday,
-    month,
     date,
     data,
+    onClick,
 }: Props) => {
     return (
-        <div>
-            <p className={isToday ? "today" : ""}>{date}</p>
+        <div onClick={onClick}>
+            {/* <p className={isToday ? "today" : ""}>{date.getDate()}</p> */}
+            <p className={isToday ? "today" : ""}>{date.getDate()}</p>
             {data?.map(d => {
-                const subtitle = `${d.amount}원`
-                return (<Schedule title={d.name} subtitle={subtitle} />)
+                return (<ScheduleChip title={d.title} subtitle={d.subtitle} />)
             })}
         </div>
     );

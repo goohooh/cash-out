@@ -19,7 +19,6 @@ function App() {
       ? expenditures.filter(exp => exp.dueDateStart.getDate() <= selectedDate)
       : [];
   }, [selectedDate]);
-  console.log(selectedExpenditures)
 
   const [date, setDate] = useState(() => {
     const d = new Date();
@@ -42,13 +41,14 @@ function App() {
   return (
     <div className="App">
       <h1 className="header">장부</h1>
-      <TotalReport data={expenditures} />
       <Calendar date={date}
                 selectedDate={selectedDate}
                 setSelectedDate={setSelectedDate}
                 setDate={setDate}
                 data={expenditures}
-                toggle={toggle} />
+                toggle={toggle}>
+        <TotalReport data={expenditures} />
+      </Calendar>
       <Modal isShowing={isShowing}
              hide={toggle}
              data={selectedExpenditures} />

@@ -1,8 +1,18 @@
+import React from "react";
+import {
+  eachDayOfInterval,
+  startOfDay,
+  endOfDay,
+} from "date-fns";
+
 import Expenditure from "../../entity/expenditure";
 
-import Schedule from "./Schedule";
+// import Schedule from "./Schedule";
 import CalendarNavigator from "./CalendarNavigator";
+import CalendarCell from "./CalendarCell";
 import styles from "./_calendar.module.css";
+import Schedule from "../../entity/schedule";
+
 
 interface CalendarProps {
   date: Date;
@@ -11,10 +21,11 @@ interface CalendarProps {
   setDate: (date: Date) => void;
   data: Expenditure[];
   toggle: () => void;
+  children?: React.ReactNode;
 }
 
 
-const Calendar = ({ date, setDate, data, setSelectedDate, selectedDate, toggle }: CalendarProps) => {
+const Calendar = ({ date, setDate, data, setSelectedDate, selectedDate, toggle, children }: CalendarProps) => {
   // const : CalendarProps = props;
 
   const onClickPrevMonth = () => {
@@ -58,9 +69,14 @@ const Calendar = ({ date, setDate, data, setSelectedDate, selectedDate, toggle }
   ).getDay();
 
   const prevDays: number[] = Array(firstDayIndex).fill(prevLastDay).map((prevDay, i, arr) => prevDay - (arr.length - i - 1))
-  const days: number[] = Array(lastDay).fill(0).map((_, i) => i + 1);
+  const days: Date[] = Array(lastDay).fill(0).map((_, i) => {
+    const d = new Date(date);
+    d.setDate(d.getDate() + i);
+    return d;
+  });
   const nextDays: number[] = Array(7 - lastDayIndex - 1).fill(0).map((_, i) => i + 1);
 
+  // Todo: remove any
   // const push = (obj: any, key: string, val: any) => {
   //   (obj[key] = obj[key] || []).push(val);
   //   return obj;
@@ -69,14 +85,55 @@ const Calendar = ({ date, setDate, data, setSelectedDate, selectedDate, toggle }
   //   data.reduce((grouped, val) => {
   //     return push(grouped, iter(val), val);
   //   }, {});
-  // const groupByDate: {} = groupBy(data, item => `${item.month}-${item.date}`)
+  const groupBy = <T, K extends keyof any>(list: T[], getKey: (item: T) => K) =>
+    list.reduce((previous, currentItem) => {
+      const group = getKey(currentItem);
+      if (!previous[group]) previous[group] = [];
+      previous[group].push(currentItem);
+      return previous;
+    }, {} as Record<K, T[]>);
+  const generateKeyByMonthDate = (date: Date): string => {
+    return `${date.getMonth()}-${date.getDate()}`;
+  }
+
+
+  const flatten = data
+    .map(d => {
+      const dayInterval: Date[] = eachDayOfInterval({
+        start: d.dueDateStart,
+        end: d.dueDateEnd,
+      });
+
+      if (dayInterval.length === 1) {
+        return new Schedule({
+          key: generateKeyByMonthDate(d.dueDateStart),
+          title: d.name,
+          subtitle: d.amount.toString(),
+          date: d.dueDateStart,
+          color: ""
+        });
+      }
+
+      return dayInterval.map((dateObj, i, arr) => {
+        const isLast = i === arr.length - 1;
+        return new Schedule({
+          key: generateKeyByMonthDate(dateObj),
+          title: d.name,
+          subtitle: isLast ? d.amount.toString() : "",
+          date: dateObj,
+          color: ""
+        });
+      });
+    })
+    .flat();
+  const groupedData = groupBy(flatten, item => item.key);
   return (
     <div className="container">
       {/* date(getMonth(), getFullYear), onClickPrevMonth, onClickNextMonth */}
       <CalendarNavigator date={date}
                          onClickPrevMonth={onClickPrevMonth}
                          onClickNextMonth={onClickNextMonth} />
-      {/* prevDays, days, nextDays */}
+      {children}
       <div className="weekdays">
         <div>일</div>
         <div>월</div>
@@ -91,11 +148,21 @@ const Calendar = ({ date, setDate, data, setSelectedDate, selectedDate, toggle }
           return <div key={`prev-${day}`} className={styles.prevDate}>{day}</div>;
         })}      
         {days.map(day => {
-          if (day === today.getDate()) {
-            return <div onClick={() => {setSelectedDate(day); toggle()}} key={`current-${day}`} className={styles.today}>{day}</div>;
-          }
-          // return (<Schedule title={} />)
-          return <div onClick={() => {setSelectedDate(day); toggle()}} key={day}>{day}</div>;
+          const date = day.getDate();
+          const isToday = (
+            day.getFullYear() === today.getFullYear() &&
+            day.getMonth() === today.getMonth() &&
+            day.getDate() === today.getDate()
+          );
+          const key = generateKeyByMonthDate(day);
+
+          return <CalendarCell key={`current-${date}`}
+                               isToday={isToday}
+                               date={day}
+                               data={groupedData[key]}
+                               onClick={() => {
+                                 setSelectedDate(date);toggle();
+                               }} />;
         })}      
         {nextDays.map(day => {
           return <div key={`next-${day}`} className={styles.nextDate}>{day}</div>;

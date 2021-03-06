@@ -25,15 +25,18 @@ const CalendarNavigator = ({
   onClickNextMonth,
 }: Props) => {
   const currentMonth = date.getMonth();
-  const prevMonthStr = months[currentMonth - 1];
+
+  const prevMonthStr = months[(currentMonth === 0 ? months.length : currentMonth) - 1];
+  const prevYearStr =  prevMonthStr === months[months.length - 1] ? (date.getFullYear() - 1) : "";
   const currentMonthStr = months[currentMonth];
-  const nextMonthStr = months[currentMonth + 1];
+  const nextMonthStr = months[currentMonth % 11 + (currentMonth === 11 ? 0 : 1)];
+  const nextYearStr =  nextMonthStr === months[0] ? (date.getFullYear() + 1) : "";
 
   return (
     <div>
-      <button onClick={onClickPrevMonth}>{prevMonthStr}</button>
+      <button onClick={onClickPrevMonth}>{prevYearStr} {prevMonthStr}</button>
       <h2>{currentMonthStr}</h2>
-      <button onClick={onClickNextMonth}>{nextMonthStr}</button>
+  <button onClick={onClickNextMonth}>{nextYearStr} {nextMonthStr}</button>
     </div>
   );
 }
