@@ -1,5 +1,6 @@
 import data from "../data/data.json";
 import Calendar from "./component/Calendar";
+import TotalReport from "./component/ToTalReport";
 import ExpenditureMockAPI from "../data/expenditureMockAPI";
 import Expenditure from "../entity/expenditure";
 import { useEffect, useState } from "react";
@@ -22,9 +23,7 @@ function App() {
 
   return (
     <div className="App">
-      <ul>
-        {data.map((d: any, i: number) => (<li key={i}>{d.name}</li>))}
-      </ul>
+      <TotalReport data={expenditures} />
       <Calendar date={date}
                 setDate={setDate}
                 data={expenditures} />
