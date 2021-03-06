@@ -72,15 +72,6 @@ const Calendar = ({ date, setDate, data, setSelectedDate, selectedDate, toggle, 
   });
   const nextDays: number[] = Array(7 - lastDayIndex - 1).fill(0).map((_, i) => i + 1);
 
-  // Todo: remove any
-  // const push = (obj: any, key: string, val: any) => {
-  //   (obj[key] = obj[key] || []).push(val);
-  //   return obj;
-  // };
-  // const groupBy: {} = (data: [], iter: (v: any) => any) => 
-  //   data.reduce((grouped, val) => {
-  //     return push(grouped, iter(val), val);
-  //   }, {});
   const groupBy = <T, K extends keyof any>(list: T[], getKey: (item: T) => K) =>
     list.reduce((previous, currentItem) => {
       const group = getKey(currentItem);
@@ -88,6 +79,7 @@ const Calendar = ({ date, setDate, data, setSelectedDate, selectedDate, toggle, 
       previous[group].push(currentItem);
       return previous;
     }, {} as Record<K, T[]>);
+
   const generateKeyByMonthDate = (date: Date): string => {
     return `${date.getMonth()}-${date.getDate()}`;
   }
