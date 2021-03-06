@@ -1,30 +1,21 @@
 import Expenditure from "../../entity/expenditure";
-import styles from "./_calendar.module.css";
 
-const months: string[] = [
-  "1월",
-  "2월",
-  "3월",
-  "4월",
-  "5월",
-  "6월",
-  "7월",
-  "8월",
-  "9월",
-  "10월",
-  "11월",
-  "12월",
-];
+import Schedule from "./Schedule";
+import CalendarNavigator from "./CalendarNavigator";
+import styles from "./_calendar.module.css";
 
 interface CalendarProps {
   date: Date;
-  setDate: Function;
+  selectedDate: number | null;
+  setSelectedDate: (date: number | null) => void;
+  setDate: (date: Date) => void;
   data: Expenditure[];
+  toggle: () => void;
 }
 
 
-const Calendar = (props: CalendarProps) => {
-  const { date, setDate, data }: CalendarProps = props;
+const Calendar = ({ date, setDate, data, setSelectedDate, selectedDate, toggle }: CalendarProps) => {
+  // const : CalendarProps = props;
 
   const onClickPrevMonth = () => {
     const selectedMonth = date.getMonth();
@@ -46,8 +37,6 @@ const Calendar = (props: CalendarProps) => {
   }
 
   const today: Date = new Date();
-
-  const monthStr: string = months[date.getMonth()];
   const lastDay = new Date(
     date.getFullYear(),
     date.getMonth() + 1,
@@ -71,13 +60,23 @@ const Calendar = (props: CalendarProps) => {
   const prevDays: number[] = Array(firstDayIndex).fill(prevLastDay).map((prevDay, i, arr) => prevDay - (arr.length - i - 1))
   const days: number[] = Array(lastDay).fill(0).map((_, i) => i + 1);
   const nextDays: number[] = Array(7 - lastDayIndex - 1).fill(0).map((_, i) => i + 1);
+
+  // const push = (obj: any, key: string, val: any) => {
+  //   (obj[key] = obj[key] || []).push(val);
+  //   return obj;
+  // };
+  // const groupBy: {} = (data: [], iter: (v: any) => any) => 
+  //   data.reduce((grouped, val) => {
+  //     return push(grouped, iter(val), val);
+  //   }, {});
+  // const groupByDate: {} = groupBy(data, item => `${item.month}-${item.date}`)
   return (
     <div className="container">
-      <div>
-        <button onClick={onClickPrevMonth}>지난달</button>
-        <h2>{monthStr}</h2>
-        <button onClick={onClickNextMonth}>다음달</button>
-      </div>
+      {/* date(getMonth(), getFullYear), onClickPrevMonth, onClickNextMonth */}
+      <CalendarNavigator date={date}
+                         onClickPrevMonth={onClickPrevMonth}
+                         onClickNextMonth={onClickNextMonth} />
+      {/* prevDays, days, nextDays */}
       <div className="weekdays">
         <div>일</div>
         <div>월</div>
@@ -93,9 +92,10 @@ const Calendar = (props: CalendarProps) => {
         })}      
         {days.map(day => {
           if (day === today.getDate()) {
-            return <div key={`current-${day}`} className={styles.today}>{day}</div>;
+            return <div onClick={() => {setSelectedDate(day); toggle()}} key={`current-${day}`} className={styles.today}>{day}</div>;
           }
-          return <div key={day}>{day}</div>;
+          // return (<Schedule title={} />)
+          return <div onClick={() => {setSelectedDate(day); toggle()}} key={day}>{day}</div>;
         })}      
         {nextDays.map(day => {
           return <div key={`next-${day}`} className={styles.nextDate}>{day}</div>;

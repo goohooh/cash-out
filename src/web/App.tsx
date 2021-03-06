@@ -1,7 +1,8 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 
 import Expenditure from "../entity/expenditure";
 import ExpenditureMockAPI from "../data/expenditureMockAPI";
+import ExpenditureRepo from "../repo/ExpenditureRepo";
 
 import TotalReport from "./component/ToTalReport";
 import Calendar from "./component/Calendar";
@@ -10,20 +11,32 @@ import Modal from "./component/Modal";
 import useModal from "./hook/useModal";
 
 function App() {
-  const expenditureRepo = new ExpenditureMockAPI();
+  const [expenditureRepo] = useState<ExpenditureRepo>(() => new ExpenditureMockAPI());
+  const [expenditures, setExpenditures] = useState<Expenditure[]>([]);
+  const [selectedDate, setSelectedDate] = useState<number | null>(null)
+  const selectedExpenditures = useMemo(() => {
+    return selectedDate
+      ? expenditures.filter(exp => exp.dueDateStart.getDate() <= selectedDate)
+      : [];
+  }, [selectedDate]);
+  console.log(selectedExpenditures)
+
   const [date, setDate] = useState(() => {
     const d = new Date();
     d.setDate(1);
     return d;
   });
-  const [expenditures, setExpenditures] = useState<Expenditure[]>([]);
   const { isShowing, toggle } = useModal();
 
   useEffect(() => {
-    const year: number = date.getFullYear();
-    const month: number = date.getMonth();
-    expenditureRepo.getExpenditures(year, month)
-      .then(expenditures => (setExpenditures(expenditures)))
+    expenditureRepo
+      .getExpenditures(
+        date.getFullYear(),
+        date.getMonth()
+      )
+      .then(expenditures => {
+        setExpenditures(expenditures)
+      });
   }, [date]);
 
   return (
@@ -31,10 +44,14 @@ function App() {
       <h1 className="header">장부</h1>
       <TotalReport data={expenditures} />
       <Calendar date={date}
+                selectedDate={selectedDate}
+                setSelectedDate={setSelectedDate}
                 setDate={setDate}
-                data={expenditures} />
+                data={expenditures}
+                toggle={toggle} />
       <Modal isShowing={isShowing}
-             hide={toggle} />
+             hide={toggle}
+             data={selectedExpenditures} />
     </div>
   );
 }
