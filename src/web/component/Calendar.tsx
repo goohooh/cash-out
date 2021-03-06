@@ -25,7 +25,6 @@ interface CalendarProps {
 
 const Calendar = (props: CalendarProps) => {
   const { date, setDate, data }: CalendarProps = props;
-  console.log(data);
 
   const onClickPrevMonth = () => {
     const selectedMonth = date.getMonth();
@@ -48,7 +47,7 @@ const Calendar = (props: CalendarProps) => {
 
   const today: Date = new Date();
 
-  const month = months[date.getMonth()];
+  const monthStr: string = months[date.getMonth()];
   const lastDay = new Date(
     date.getFullYear(),
     date.getMonth() + 1,
@@ -76,7 +75,7 @@ const Calendar = (props: CalendarProps) => {
     <div className="container">
       <div>
         <button onClick={onClickPrevMonth}>지난달</button>
-        <h2>{month}</h2>
+        <h2>{monthStr}</h2>
         <button onClick={onClickNextMonth}>다음달</button>
       </div>
       <div className="weekdays">

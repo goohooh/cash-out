@@ -10,6 +10,7 @@ const sumAllAmount = (total: number = 0, expenditure: Expenditure) => {
 };
 
 const TotalReport = (props: TotalReportProps) => {
+  // Todo: Generic과 무엇을 사용하면 filter의 콜백을 추출할 수 있을까
   const taxTotal: number = props.data
     .filter((expenditure: Expenditure) => expenditure.type === "tax")
     .reduce(sumAllAmount, 0);

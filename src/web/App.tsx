@@ -1,9 +1,13 @@
-import data from "../data/data.json";
-import Calendar from "./component/Calendar";
-import TotalReport from "./component/ToTalReport";
-import ExpenditureMockAPI from "../data/expenditureMockAPI";
-import Expenditure from "../entity/expenditure";
 import { useEffect, useState } from "react";
+
+import Expenditure from "../entity/expenditure";
+import ExpenditureMockAPI from "../data/expenditureMockAPI";
+
+import TotalReport from "./component/ToTalReport";
+import Calendar from "./component/Calendar";
+import Modal from "./component/Modal";
+
+import useModal from "./hook/useModal";
 
 function App() {
   const expenditureRepo = new ExpenditureMockAPI();
@@ -13,6 +17,7 @@ function App() {
     return d;
   });
   const [expenditures, setExpenditures] = useState<Expenditure[]>([]);
+  const { isShowing, toggle } = useModal();
 
   useEffect(() => {
     const year: number = date.getFullYear();
@@ -23,10 +28,13 @@ function App() {
 
   return (
     <div className="App">
+      <h1 className="header">장부</h1>
       <TotalReport data={expenditures} />
       <Calendar date={date}
                 setDate={setDate}
                 data={expenditures} />
+      <Modal isShowing={isShowing}
+             hide={toggle} />
     </div>
   );
 }
