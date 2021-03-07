@@ -4,9 +4,9 @@ import styles from "./Modal.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 interface ModalProps {
-    isShowing: boolean;
-    hide: () => void;
-    data: Expenditure[];
+  isShowing: boolean;
+  hide: () => void;
+  data: Expenditure[];
 }
 
 const Modal: FC<ModalProps> = ({ isShowing, hide, data }) => {

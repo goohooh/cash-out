@@ -1,5 +1,6 @@
 import { useEffect, useState, useMemo } from "react";
 import useModal from "./hook/useModal";
+import { startOfMonth } from "date-fns";
 
 import Expenditure from "../entity/expenditure";
 import ExpenditureMockAPI from "../data/expenditureMockAPI";
@@ -16,18 +17,13 @@ function App() {
   const [expenditureRepo] = useState<ExpenditureRepo>(() => new ExpenditureMockAPI());
   const [expenditures, setExpenditures] = useState<Expenditure[]>([]);
   const [selectedDate, setSelectedDate] = useState<number | null>(null)
-  const [baseDate, setDate] = useState(() => {
-    const d = new Date();
-    d.setDate(1);
-    return d;
-  });
-  const selectedExpenditures = useMemo(() => {
+  const [baseDate, setDate] = useState<Date>(() => startOfMonth(new Date()));
+  const selectedExpenditures = useMemo<Expenditure[]>(() => {
     return selectedDate
       ? expenditures.filter(exp => exp.dueDateStart.getDate() <= selectedDate)
       : [];
   }, [selectedDate, expenditures]);
   const { isShowing, toggle } = useModal();
-
 
   useEffect(() => {
     expenditureRepo
