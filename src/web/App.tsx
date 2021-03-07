@@ -7,7 +7,7 @@ import "./Fontawesome";
 
 import Expenditure from "../entity/model/expenditure";
 import Schedule from "../entity/model/schedule";
-import { expenditureToSchedule } from "../entity/transfer";
+import { expenditureToSchedule } from "./common/transfer";
 import ExpenditureMockAPI from "../data/expenditureMockAPI";
 import ExpenditureRepo from "../repo/ExpenditureRepo";
 

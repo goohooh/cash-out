@@ -14,13 +14,15 @@ React에서 Clean architecture를 적용한 사례들을 살펴보고 현재 프
 
 (아직 프로젝트 크기가 매우 크지는 않기 때문에 package by layer 형태로 구성했습니다)
 
-- common: 주로 유틸리티 함수를 담았습니다.
 - data: 실제 데이터를 불러올 구현체가 있습니다.
 - entity: 
     - model: 비지니스 로직에 필요한 객체 정의
     - structure: 어플리케이션 로직에 필요한 객체 정의
 - repo: 데이터를 불리오기 위한 인터페이스 입니다. 실제 구현(HTTP, LocalStorage)에 대해서는 모릅니다
 - web: 리액트로 구성된 웹 어플리케이션 로직이 담겨 있습니다.
+    - common: 유틸리티
+    - component: UI 컴포넌트
+    - hook: 커스텀 react hook
 
 _references_
 - https://github.com/RostislavDugin/clean-architecture-react-typescript

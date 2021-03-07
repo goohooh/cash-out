@@ -1,9 +1,9 @@
-import Schedule from "./model/schedule";
-import Expenditure from "./model/expenditure";
-import { ExpenseTypeColorMap } from "./structure/expenseTypeColorMap";
+import Schedule from "../../entity/model/schedule";
+import Expenditure from "../../entity/model/expenditure";
+import { ExpenseTypeColorMap } from "../../entity/structure/expenseTypeColorMap";
 
 import { format, eachDayOfInterval } from "date-fns";
-import { numFormat } from "../common/util";
+import { numFormat } from "./util";
 
 export const expenditureToSchedule = (expenditures: Expenditure[]): Schedule[] => {
   return expenditures
