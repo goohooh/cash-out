@@ -86,7 +86,6 @@ function App() {
     <div className="app">
       <h1 className="header txt-big">장부</h1>
       <Calendar baseDate={baseDate}
-                // setSelectedDate={setSelectedDate}
                 setBaseDate={setDate}
                 data={schedules}
                 onClickCell={(date: Date) => {
