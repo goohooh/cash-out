@@ -19,16 +19,20 @@ const Modal: FC<ModalProps> = ({
   data,
   selectedDate,
 }) => {
-  const dataTillSelectedDate = useMemo<Expenditure[]>(() => {
+  const dataOnSelectedDate = useMemo<Expenditure[]>(() => {
     return selectedDate
       ? data 
-        .filter(({ dueDateStart }) => {
-          return dueDateStart.getDate() <= selectedDate.getDate();
+        .filter(({ dueDateStart, dueDateEnd }) => {
+          const selected = selectedDate.getDate();
+          const start = dueDateStart.getDate();
+          const end = dueDateEnd.getDate();
+
+          return start <= selected && selected <= end;
         })
       : [];
   }, [selectedDate, data]);
 
-  const total: number = dataTillSelectedDate
+  const total: number = dataOnSelectedDate
     .map(exp => exp.amount)
     .reduce((acc, cur) => (acc += cur), 0);
 
@@ -52,7 +56,7 @@ const Modal: FC<ModalProps> = ({
           </div>
 
           <ul>
-            {dataTillSelectedDate.map((exp, i) => {
+            {dataOnSelectedDate.map((exp, i) => {
               return (
                 <li key={i}
                     className={styles.item}>
