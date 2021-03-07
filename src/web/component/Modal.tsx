@@ -1,4 +1,5 @@
 import { FC } from "react";
+import { useMemo } from "react";
 import Expenditure from "../../entity/model/expenditure";
 import styles from "./Modal.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -18,7 +19,16 @@ const Modal: FC<ModalProps> = ({
   data,
   selectedDate,
 }) => {
-  const total: number = data
+  const dataTillSelectedDate = useMemo<Expenditure[]>(() => {
+    return selectedDate
+      ? data 
+        .filter(({ dueDateStart }) => {
+          return dueDateStart.getDate() <= selectedDate.getDate();
+        })
+      : [];
+  }, [selectedDate, data]);
+
+  const total: number = dataTillSelectedDate
     .map(exp => exp.amount)
     .reduce((acc, cur) => (acc += cur), 0);
 
@@ -42,7 +52,7 @@ const Modal: FC<ModalProps> = ({
           </div>
 
           <ul>
-            {data.map((exp, i) => {
+            {dataTillSelectedDate.map((exp, i) => {
               return (
                 <li key={i}
                     className={styles.item}>

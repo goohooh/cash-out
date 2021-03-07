@@ -1,4 +1,4 @@
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState } from "react";
 import useModal from "./hook/useModal";
 import {
   startOfMonth,
@@ -29,15 +29,6 @@ function App() {
   const [baseDate, setDate] = useState<Date>(() => startOfMonth(new Date()));
 
   const { isShowing, toggleModal } = useModal();
-
-  const selectedExpenditures = useMemo<Expenditure[]>(() => {
-    return selectedDate
-      ? expenditures
-        .filter(({ dueDateStart }) => {
-          return dueDateStart.getDate() <= selectedDate.getDate();
-        })
-      : [];
-  }, [selectedDate, expenditures]);
 
   useEffect(() => {
     expenditureRepo
@@ -98,7 +89,7 @@ function App() {
       <Modal isShowing={isShowing}
              hide={toggleModal}
              selectedDate={selectedDate}
-             data={selectedExpenditures} />
+             data={expenditures} />
       <div className="notice">
         <p>
           <FontAwesomeIcon icon="info-circle" className="m-right-smallest" />

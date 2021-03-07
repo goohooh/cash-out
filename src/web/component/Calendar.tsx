@@ -75,14 +75,15 @@ const Calendar = ({
       <div className={styles.days}>
         {days.map(day => {
           const key = format(day, "MM-dd");
+          const sameMonth = isSameMonth(day, baseDate);
 
           return <CalendarCell key={key}
                                isToday={isSameDay(day, today)}
-                               isSameMonth={isSameMonth(day, baseDate)}
+                               isSameMonth={sameMonth}
                                date={day}
                                schedules={groupedData[key]}
                                onClick={() => {
-                                 onClickCell(day);
+                                 sameMonth && onClickCell(day);
                                }} />;
         })}      
       </div>
