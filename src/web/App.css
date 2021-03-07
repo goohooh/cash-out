@@ -42,6 +42,7 @@ ul, ol {
     border: none;
     background: none;
     outline: none;
+    cursor: pointer;
 }
 
 .txt-bigger {
@@ -74,6 +75,14 @@ ul, ol {
 
 .m-left-smallest {
     margin-left: 0.5rem;
+}
+
+.pad-t-small {
+    padding-top: 0.875rem;
+}
+
+.pad-b-small {
+    padding-top: 0.875rem;
 }
 
 .w-100 {
