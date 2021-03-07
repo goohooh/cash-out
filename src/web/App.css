@@ -34,6 +34,18 @@ ul, ol {
     justify-content: space-between;
 }
 
+.justify-start-self {
+    justify-self: flex-start
+}
+
+.justify-center-self {
+    justify-self: center;
+}
+
+.justify-end-self {
+    justify-self: flex-end;
+}
+
 .align-center {
     align-items: center;
 }

@@ -41,7 +41,7 @@ const CalendarNavigator = ({
     : "";
 
   return (
-    <div className={`flex justify-between align-center ${styles.bdrTopBottom}`}>
+    <div className={`flex align-center ${styles.navigator}`}>
       <button className={`${styles.btn} btn`} onClick={onClickPrevMonth}>
         <FontAwesomeIcon icon="chevron-left" className="m-right-smallest" />
         {prevYearStr} {prevMonthStr}

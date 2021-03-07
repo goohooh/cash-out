@@ -1,9 +1,25 @@
+.navigator {
+  border-top: 1.4px solid #ccc;
+  border-bottom: 1px solid #ccc;
+}
+.navigator > * {
+  flex-basis: 33%;
+  flex-grow: 1;
+}
+
+.navigator h2 {
+  justify-content: center;
+}
+
+.navigator button {
+  text-align: left;
+}
+
+.navigator button:last-of-type {
+  text-align: right;
+}
+
 .btn {
   padding: 1rem;
   color: #888;
-}
-
-.bdrTopBottom {
-  border-top: 1.4px solid #ccc;
-  border-bottom: 1px solid #ccc;
 }
