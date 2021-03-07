@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo, useCallback } from "react";
 import useModal from "./hook/useModal";
 import {
   startOfMonth,
@@ -41,38 +41,45 @@ function App() {
       });
   }, [baseDate]);
 
-  const schedules: Schedule[] = expenditures
-    .map(d => {
-      const dayInterval: Date[] = eachDayOfInterval({
-        start: d.dueDateStart,
-        end: d.dueDateEnd,
-      });
-
-      if (dayInterval.length === 1) {
-        return new Schedule({
-          key: format(d.dueDateStart, "MM-dd"),
-          title: d.name,
-          subtitle: numFormat(d.amount),
-          date: d.dueDateStart,
-          color: ExpenseTypeColorMap[d.type].color,
-          background: ExpenseTypeColorMap[d.type].background,
+  const schedules: Schedule[] = useMemo(() => {
+    return expenditures
+      .map(d => {
+        const dayInterval: Date[] = eachDayOfInterval({
+          start: d.dueDateStart,
+          end: d.dueDateEnd,
         });
-      }
 
-      // 납부 기한이 하루 이상인 경우
-      return dayInterval.map((dateObj, i, arr) => {
-        const isLast = i === arr.length - 1;
-        return new Schedule({
-          key: format(dateObj, "MM-dd"),
-          title: d.name,
-          subtitle: isLast ? numFormat(d.amount) : "",
-          date: dateObj,
-          color: ExpenseTypeColorMap[d.type].color,
-          background: ExpenseTypeColorMap[d.type].background,
+        if (dayInterval.length === 1) {
+          return new Schedule({
+            key: format(d.dueDateStart, "MM-dd"),
+            title: d.name,
+            subtitle: numFormat(d.amount),
+            date: d.dueDateStart,
+            color: ExpenseTypeColorMap[d.type].color,
+            background: ExpenseTypeColorMap[d.type].background,
+          });
+        }
+
+        // 납부 기한이 하루 이상인 경우
+        return dayInterval.map((dateObj, i, arr) => {
+          const isLast = i === arr.length - 1;
+          return new Schedule({
+            key: format(dateObj, "MM-dd"),
+            title: d.name,
+            subtitle: isLast ? numFormat(d.amount) : "",
+            date: dateObj,
+            color: ExpenseTypeColorMap[d.type].color,
+            background: ExpenseTypeColorMap[d.type].background,
+          });
         });
-      });
-    })
-    .flat();
+      })
+      .flat();
+  }, [expenditures])
+
+  const onClickCell = useCallback((date: Date) => {
+    setSelectedDate(date);
+    toggleModal();
+  }, []);
 
   return (
     <div className="app">
@@ -80,10 +87,7 @@ function App() {
       <Calendar baseDate={baseDate}
                 setBaseDate={setDate}
                 data={schedules}
-                onClickCell={(date: Date) => {
-                  setSelectedDate(date);
-                  toggleModal();
-                }}>
+                onClickCell={onClickCell}>
         <TotalReport data={expenditures} />
       </Calendar>
       <Modal isShowing={isShowing}

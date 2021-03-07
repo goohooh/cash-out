@@ -27,13 +27,14 @@ interface CalendarProps {
   children?: React.ReactNode;
 }
 
-const Calendar = ({
+const Calendar = React.memo(({
   baseDate,
   data,
   setBaseDate,
   onClickCell,
   children
 }: CalendarProps) => {
+  console.log('calendar')
   const onClickPrevMonth = () => {
     setBaseDate(subMonths(baseDate, 1));
   }
@@ -89,6 +90,8 @@ const Calendar = ({
       </div>
     </div>
   );
-}
+}, (prev, cur) => {
+  return prev.data === cur.data;
+});
 
 export default Calendar;
