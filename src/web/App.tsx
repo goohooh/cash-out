@@ -1,14 +1,16 @@
 import { useEffect, useState, useMemo } from "react";
+import useModal from "./hook/useModal";
 
 import Expenditure from "../entity/expenditure";
 import ExpenditureMockAPI from "../data/expenditureMockAPI";
 import ExpenditureRepo from "../repo/ExpenditureRepo";
 
-import TotalReport from "./component/ToTalReport";
+import TotalReport from "./component/TotalReport";
 import Calendar from "./component/Calendar";
 import Modal from "./component/Modal";
 
-import useModal from "./hook/useModal";
+import "./App.css";
+import "./Fontawesome";
 
 function App() {
   const [expenditureRepo] = useState<ExpenditureRepo>(() => new ExpenditureMockAPI());
@@ -39,8 +41,8 @@ function App() {
   }, [expenditureRepo, date]);
 
   return (
-    <div className="App">
-      <h1 className="header">장부</h1>
+    <div className="app">
+      <h1 className="header txt-big">장부</h1>
       <Calendar date={date}
                 selectedDate={selectedDate}
                 setSelectedDate={setSelectedDate}

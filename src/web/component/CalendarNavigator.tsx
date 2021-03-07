@@ -1,3 +1,6 @@
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import styles from "./CalendarNavigator.module.css";
+
 interface Props {
   date: Date;
   onClickPrevMonth: () => void;
@@ -33,10 +36,16 @@ const CalendarNavigator = ({
   const nextYearStr =  nextMonthStr === months[0] ? (date.getFullYear() + 1) : "";
 
   return (
-    <div>
-      <button onClick={onClickPrevMonth}>{prevYearStr} {prevMonthStr}</button>
-      <h2>{currentMonthStr}</h2>
-  <button onClick={onClickNextMonth}>{nextYearStr} {nextMonthStr}</button>
+    <div className={`flex justify-between align-center ${styles.bdrTopBottom}`}>
+      <button className={`${styles.btn} btn`} onClick={onClickPrevMonth}>
+        <FontAwesomeIcon icon="chevron-left" className="m-right-smallest" />
+        {prevYearStr} {prevMonthStr}
+      </button>
+      <h2 className="txt-big flex align-center">{currentMonthStr}</h2>
+      <button className={`${styles.btn} btn`} onClick={onClickNextMonth}>
+        {nextYearStr} {nextMonthStr}
+        <FontAwesomeIcon icon="chevron-right" className="m-left-smallest" />
+      </button>
     </div>
   );
 }

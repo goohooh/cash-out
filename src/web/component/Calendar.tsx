@@ -6,7 +6,7 @@ import Expenditure from "../../entity/expenditure";
 // import Schedule from "./Schedule";
 import CalendarNavigator from "./CalendarNavigator";
 import CalendarCell from "./CalendarCell";
-import styles from "./_calendar.module.css";
+import styles from "./Calendar.module.css";
 import Schedule from "../../entity/schedule";
 
 

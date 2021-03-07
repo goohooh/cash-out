@@ -1,0 +1,72 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: sans-serif;
+  letter-spacing: -0.2px;
+}
+
+html {
+  font-size: 14px;
+}
+
+ul, ol {
+    list-style: none;
+}
+
+.header {
+    background: #eee;
+    font-weight: normal;
+    text-align: center;
+    line-height: 2.4;
+}
+
+.flex {
+    display: flex;
+}
+
+.flex-wrap {
+    flex-wrap: wrap;
+}
+
+.justify-between {
+    justify-content: space-between;
+}
+
+.align-center {
+    align-items: center;
+}
+
+.btn {
+    border: none;
+    background: none;
+    outline: none;
+}
+
+.txt-bigger {
+    font-size: 1.5rem;
+}
+
+.txt-big {
+    font-size: 1.25rem;
+}
+
+.txt-standard {
+    font-size: 1rem;
+}
+
+.txt-small {
+    font-size: 0.875rem;
+}
+
+.txt-smaller {
+    font-size: 0.75rem;
+}
+
+.m-right-smallest {
+    margin-right: 0.5rem;
+}
+
+.m-left-smallest {
+    margin-left: 0.5rem;
+}

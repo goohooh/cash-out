@@ -1,0 +1,9 @@
+.btn {
+  padding: 1rem;
+  color: #888;
+}
+
+.bdrTopBottom {
+  border-top: 1.4px solid #ccc;
+  border-bottom: 1px solid #ccc;
+}

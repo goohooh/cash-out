@@ -1,4 +1,6 @@
 import Expenditure from "../../entity/expenditure";
+import styles from "./TotalReport.module.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 interface TotalReportProps {
   data: Expenditure[]
@@ -28,13 +30,39 @@ const TotalReport = (props: TotalReportProps) => {
 
   return (
     <div>
-      <ul>
-        <li>공과금 {utilityBillTotal}</li>
-        <li>세금 {taxTotal}</li>
-        <li>공과금 {cardBillTotal}</li>
-        <li>공과금 {tradePayableTotal}</li>
+      <ul className={`${styles.container} flex flex-wrap`}>
+        <li className={styles.category}>
+          <span>
+            <FontAwesomeIcon icon="check-square" /> 공과금
+          </span>
+          <strong>{utilityBillTotal}</strong>
+        </li>
+
+        <li className={styles.category}>
+          <span>
+            <FontAwesomeIcon icon="check-square" /> 세금
+          </span>
+          <strong>{taxTotal}원</strong>
+        </li>
+
+        <li className={styles.category}>
+          <span>
+            <FontAwesomeIcon icon="check-square" /> 카드 청구액
+          </span>
+          <strong>{cardBillTotal}원</strong>
+        </li>
+
+        <li className={styles.category}>
+          <span>
+            <FontAwesomeIcon icon="check-square" /> 거래처대금
+          </span>
+          <strong>{tradePayableTotal}원</strong>
+        </li>
       </ul>
-      <div>총 출금액 {expenditureTotal}</div>
+      <div className={styles.total}>
+        <span className="m-right-smallest">총 출금액</span>
+        <strong>{expenditureTotal}원</strong>
+      </div>
     </div>
   );
 }
