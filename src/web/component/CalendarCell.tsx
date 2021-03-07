@@ -1,23 +1,34 @@
 import Schedule from "../../entity/schedule";
 import ScheduleChip from "./ScheduleChip";
+import styles from "./CalendarCell.module.css";
 
 interface Props {
   isToday: boolean;
+  isSameMonth: boolean,
   date: Date;
-  data?: Schedule[];
+  schedules?: Schedule[];
   onClick?: () => void;
 }
 
 const CalendarCell = ({
   isToday,
+  isSameMonth,
   date,
-  data,
+  schedules,
   onClick,
 }: Props) => {
   return (
-    <div onClick={onClick}>
-      <p className={isToday ? "today" : ""}>{date.getDate()}</p>
-      {data?.map((d, i) => {
+    <div className={styles.cell} onClick={onClick}>
+      {isSameMonth
+        ? (
+          <p className={styles.dayNum}>
+            <span className={`${isToday ? styles.today : ""}`}>{date.getDate()}</span>
+          </p>
+        )
+        : null
+      }
+
+      {schedules?.map((d, i) => {
         return (
           <ScheduleChip key={`${d.key}-${i}`}
                         title={d.title}

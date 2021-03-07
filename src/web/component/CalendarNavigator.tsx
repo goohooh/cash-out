@@ -2,7 +2,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import styles from "./CalendarNavigator.module.css";
 
 interface Props {
-  date: Date;
+  baseDate: Date;
   onClickPrevMonth: () => void;
   onClickNextMonth: () => void;
 }
@@ -23,17 +23,17 @@ const months: string[] = [
 ];
 
 const CalendarNavigator = ({
-  date,
+  baseDate,
   onClickPrevMonth,
   onClickNextMonth,
 }: Props) => {
-  const currentMonth = date.getMonth();
+  const currentMonth = baseDate.getMonth();
 
   const prevMonthStr = months[(currentMonth === 0 ? months.length : currentMonth) - 1];
-  const prevYearStr =  prevMonthStr === months[months.length - 1] ? (date.getFullYear() - 1) : "";
+  const prevYearStr =  prevMonthStr === months[months.length - 1] ? (baseDate.getFullYear() - 1) : "";
   const currentMonthStr = months[currentMonth];
   const nextMonthStr = months[currentMonth % 11 + (currentMonth === 11 ? 0 : 1)];
-  const nextYearStr =  nextMonthStr === months[0] ? (date.getFullYear() + 1) : "";
+  const nextYearStr =  nextMonthStr === months[0] ? (baseDate.getFullYear() + 1) : "";
 
   return (
     <div className={`flex justify-between align-center ${styles.bdrTopBottom}`}>

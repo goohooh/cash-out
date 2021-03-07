@@ -1,0 +1,46 @@
+.cell {
+    width: 100%;
+    flex-basis: 14.25%;
+    flex-grow: 1;
+    min-height: 70px;
+    border-right: 1px solid #dadada;
+    border-bottom: 1px solid #dadada;
+    font-size: 0.75rem;
+    font-weight: normal;
+}
+
+.cell:nth-of-type(7n) {
+    border-right: none;
+}
+
+.cell:not(.outOfThisMonth):hover {
+    background-color: #eee;
+    cursor: pointer;
+}
+.dayNum {
+    position: relative;
+    padding: 8px;
+    height: 30px;
+    color: #888;
+}
+
+.dayNum .today {
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    color: #fff;
+    background-color: #167e56;
+}
+
+.days .day:hover {
+    background-color: #262626;
+    border: 0.2rem solid #777;
+    cursor: pointer;
+}
+

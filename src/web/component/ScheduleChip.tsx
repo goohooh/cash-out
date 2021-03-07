@@ -5,8 +5,8 @@ interface Props {
 
 const Schedule = ({ title, subtitle }: Props) => {
   return (
-    <div>
-        <h4>{title}</h4>
+    <div className="w-100">
+        <p>{title}</p>
         <p>{subtitle}</p>
     </div>
   );

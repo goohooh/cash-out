@@ -12,7 +12,6 @@
     width: 45rem;
     height: 52rem;
     background-color: #222227;
-    box-shadow: 0 0.5rem 3rem rgba(0, 0, 0, 0.4);
 }
 
 .month {
@@ -24,7 +23,6 @@
     align-items: center;
     padding: 0 2rem;
     text-align: center;
-    text-shadow: 0 0.3rem 0.5rem rgba(0, 0, 0, 0.5);
 }
 
 .month i {
@@ -46,54 +44,19 @@
 
 .weekdays {
     width: 100%;
-    height: 5rem;
-    padding: 0 0.4rem;
+    height: 2rem;
     display: flex;
     align-items: center;
-}
 
-.weekdays div {
-    font-size: 1.5rem;
-    font-weight: 400;
-    letter-spacing: 0.1rem;
-    width: calc(44.2rem / 7);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-shadow: 0 0.3rem 0.5rem rgba(0, 0, 0, 0.5);
+    justify-content: space-around;
+
+    border-bottom: 1px solid #dadada;
+    font-size: 1rem;
+    color: #555;
 }
 
 .days {
-    width: 100%;
     display: flex;
     flex-wrap: wrap;
-    padding: 0.2rem;
+    width: 100%;
 }
-
-.days div {
-    font-size: 1.4rem;
-    margin: 0.3rem;
-    width: calc(40.2rem / 7);
-    height: 5rem;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-shadow: 0 0.3rem 0.5rem rgba(0, 0, 0, 0.5);
-    transition: background-color 0.2s;
-}
-
-.days div:hover:not(.today) {
-    background-color: #262626;
-    border: 0.2rem solid #777;
-    cursor: pointer;
-}
-
-.prevDate,
-.nextDate {
-    opacity: 0.5;
-}
-
-.today {
-    background-color: #167e56;
-}
-  

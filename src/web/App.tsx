@@ -16,34 +16,34 @@ function App() {
   const [expenditureRepo] = useState<ExpenditureRepo>(() => new ExpenditureMockAPI());
   const [expenditures, setExpenditures] = useState<Expenditure[]>([]);
   const [selectedDate, setSelectedDate] = useState<number | null>(null)
+  const [baseDate, setDate] = useState(() => {
+    const d = new Date();
+    d.setDate(1);
+    return d;
+  });
   const selectedExpenditures = useMemo(() => {
     return selectedDate
       ? expenditures.filter(exp => exp.dueDateStart.getDate() <= selectedDate)
       : [];
   }, [selectedDate, expenditures]);
-
-  const [date, setDate] = useState(() => {
-    const d = new Date();
-    d.setDate(1);
-    return d;
-  });
   const { isShowing, toggle } = useModal();
+
 
   useEffect(() => {
     expenditureRepo
       .getExpenditures(
-        date.getFullYear(),
-        date.getMonth()
+        baseDate.getFullYear(),
+        baseDate.getMonth()
       )
       .then(expenditures => {
         setExpenditures(expenditures)
       });
-  }, [expenditureRepo, date]);
+  }, [expenditureRepo, baseDate]);
 
   return (
     <div className="app">
       <h1 className="header txt-big">장부</h1>
-      <Calendar date={date}
+      <Calendar baseDate={baseDate}
                 selectedDate={selectedDate}
                 setSelectedDate={setSelectedDate}
                 setDate={setDate}

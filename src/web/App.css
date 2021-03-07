@@ -1,13 +1,14 @@
 * {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: sans-serif;
-  letter-spacing: -0.2px;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: sans-serif;
+    letter-spacing: -0.2px;
 }
 
-html {
-  font-size: 14px;
+body {
+    min-width: 320px;
+    font-size: 14px;
 }
 
 ul, ol {
@@ -63,10 +64,18 @@ ul, ol {
     font-size: 0.75rem;
 }
 
+.break-all {
+    word-break: break-all;
+}
+
 .m-right-smallest {
     margin-right: 0.5rem;
 }
 
 .m-left-smallest {
     margin-left: 0.5rem;
+}
+
+.w-100 {
+    width: 100%;
 }

@@ -1,7 +1,16 @@
 import React from "react";
-import { eachDayOfInterval } from "date-fns";
+import {
+  addDays,
+  subDays,
+  endOfMonth,
+  eachDayOfInterval,
+  isSameMonth,
+  isSameDay,
+  format,
+} from "date-fns";
 
 import Expenditure from "../../entity/expenditure";
+import { groupBy } from "../../common/util";
 
 // import Schedule from "./Schedule";
 import CalendarNavigator from "./CalendarNavigator";
@@ -9,9 +18,10 @@ import CalendarCell from "./CalendarCell";
 import styles from "./Calendar.module.css";
 import Schedule from "../../entity/schedule";
 
+const weekdays = ["일", "월", "화", "수", "목", "금", "토"];
 
 interface CalendarProps {
-  date: Date;
+  baseDate: Date;
   selectedDate: number | null;
   setSelectedDate: (date: number | null) => void;
   setDate: (date: Date) => void;
@@ -20,69 +30,51 @@ interface CalendarProps {
   children?: React.ReactNode;
 }
 
-
-const Calendar = ({ date, setDate, data, setSelectedDate, selectedDate, toggle, children }: CalendarProps) => {
-  // const : CalendarProps = props;
-
+const Calendar = ({
+  baseDate,
+  setDate,
+  data,
+  setSelectedDate,
+  selectedDate,
+  toggle,
+  children
+}: CalendarProps) => {
   const onClickPrevMonth = () => {
-    const selectedMonth = date.getMonth();
+    const selectedMonth = baseDate.getMonth();
     const newDate = new Date(
-      date.getFullYear(),
+      baseDate.getFullYear(),
       selectedMonth - 1,
       1
     );
     setDate(newDate);
   }
   const onClickNextMonth = () => {
-    const selectedMonth = date.getMonth();
+    const selectedMonth = baseDate.getMonth();
     const newDate = new Date(
-      date.getFullYear(),
+      baseDate.getFullYear(),
       selectedMonth + 1,
       1
     );
     setDate(newDate);
   }
 
-  const today: Date = new Date();
-  const lastDay = new Date(
-    date.getFullYear(),
-    date.getMonth() + 1,
-    0
-  ).getDate();
+  const endOfMonthDate: Date = endOfMonth(baseDate);
 
-  const prevLastDay = new Date(
-    date.getFullYear(),
-    date.getMonth(),
-    0
-  ).getDate();
+  const prevDays: Date[] = Array(baseDate.getDay())
+    .fill(0)
+    .map((_, i, arr) => subDays(baseDate, (arr.length - i)))
+  const currentDays: Date[] = Array(endOfMonthDate.getDate())
+    .fill(0)
+    .map((_, i) => addDays(baseDate, i));
+  const nextDays: Date[] = Array(7 - endOfMonthDate.getDay() - 1)
+    .fill(0)
+    .map((_, i) => addDays(endOfMonthDate, i + 1));
 
-  const firstDayIndex = date.getDay();
-
-  const lastDayIndex = new Date(
-    date.getFullYear(),
-    date.getMonth() + 1,
-    0
-  ).getDay();
-
-  const prevDays: number[] = Array(firstDayIndex).fill(prevLastDay).map((prevDay, i, arr) => prevDay - (arr.length - i - 1))
-  const days: Date[] = Array(lastDay).fill(0).map((_, i) => {
-    const d = new Date(date);
-    d.setDate(d.getDate() + i);
-    return d;
-  });
-  const nextDays: number[] = Array(7 - lastDayIndex - 1).fill(0).map((_, i) => i + 1);
-
-  const groupBy = <T, K extends keyof any>(list: T[], getKey: (item: T) => K) =>
-    list.reduce((previous, currentItem) => {
-      const group = getKey(currentItem);
-      if (!previous[group]) previous[group] = [];
-      previous[group].push(currentItem);
-      return previous;
-    }, {} as Record<K, T[]>);
-
-  const generateKeyByMonthDate = (date: Date): string => {
-    return `${date.getMonth()}-${date.getDate()}`;
-  }
+  const days = [
+    ...prevDays,
+    ...currentDays,
+    ...nextDays
+  ];
 
 
   const flatten = data
@@ -94,7 +86,7 @@ const Calendar = ({ date, setDate, data, setSelectedDate, selectedDate, toggle, 
 
       if (dayInterval.length === 1) {
         return new Schedule({
-          key: generateKeyByMonthDate(d.dueDateStart),
+          key: format(d.dueDateStart, "MM-dd"),
           title: d.name,
           subtitle: d.amount.toString(),
           date: d.dueDateStart,
@@ -105,7 +97,7 @@ const Calendar = ({ date, setDate, data, setSelectedDate, selectedDate, toggle, 
       return dayInterval.map((dateObj, i, arr) => {
         const isLast = i === arr.length - 1;
         return new Schedule({
-          key: generateKeyByMonthDate(dateObj),
+          key: format(dateObj, "MM-dd"),
           title: d.name,
           subtitle: isLast ? d.amount.toString() : "",
           date: dateObj,
@@ -114,46 +106,38 @@ const Calendar = ({ date, setDate, data, setSelectedDate, selectedDate, toggle, 
       });
     })
     .flat();
+
   const groupedData = groupBy(flatten, item => item.key);
+  const today: Date = new Date();
+
   return (
     <div className="container">
-      {/* date(getMonth(), getFullYear), onClickPrevMonth, onClickNextMonth */}
-      <CalendarNavigator date={date}
+      <CalendarNavigator baseDate={baseDate}
                          onClickPrevMonth={onClickPrevMonth}
                          onClickNextMonth={onClickNextMonth} />
+
       {children}
-      <div className="weekdays">
-        <div>일</div>
-        <div>월</div>
-        <div>화</div>
-        <div>수</div>
-        <div>목</div>
-        <div>금</div>
-        <div>토</div>
+
+      <div className={styles.weekdays}>
+        {weekdays.map(weekday => (
+          <div key={weekday} className="txt-smaller">{weekday}</div>
+        ))}
       </div>
+
       <div className={styles.days}>
-        {prevDays.map(day => {
-          return <div key={`prev-${day}`} className={styles.prevDate}>{day}</div>;
-        })}      
         {days.map(day => {
+          const key = format(day, "MM-dd");
           const date = day.getDate();
-          const isToday = (
-            day.getFullYear() === today.getFullYear() &&
-            day.getMonth() === today.getMonth() &&
-            day.getDate() === today.getDate()
-          );
-          const key = generateKeyByMonthDate(day);
 
           return <CalendarCell key={key}
-                               isToday={isToday}
+                               isToday={isSameDay(day, today)}
+                               isSameMonth={isSameMonth(day, baseDate)}
                                date={day}
-                               data={groupedData[key]}
+                               schedules={groupedData[key]}
                                onClick={() => {
-                                 setSelectedDate(date);toggle();
+                                 setSelectedDate(date);
+                                 toggle();
                                }} />;
-        })}      
-        {nextDays.map(day => {
-          return <div key={`next-${day}`} className={styles.nextDate}>{day}</div>;
         })}      
       </div>
     </div>
