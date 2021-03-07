@@ -2,6 +2,8 @@ import React from "react";
 import {
   addDays,
   subDays,
+  addMonths,
+  subMonths,
   endOfMonth,
   isSameMonth,
   isSameDay,
@@ -11,7 +13,6 @@ import {
 import Schedule from "../../entity/model/schedule";
 import { groupBy } from "../../common/util";
 
-// import Schedule from "./Schedule";
 import CalendarNavigator from "./CalendarNavigator";
 import CalendarCell from "./CalendarCell";
 import styles from "./Calendar.module.css";
@@ -20,38 +21,24 @@ const weekdays = ["일", "월", "화", "수", "목", "금", "토"];
 
 interface CalendarProps {
   baseDate: Date;
-  setSelectedDate: (date: Date | null) => void;
-  setBaseDate: (date: Date) => void;
   data: Schedule[];
-  toggleModal: () => void;
+  setBaseDate: (date: Date) => void;
+  onClickCell: (date: Date) => void;
   children?: React.ReactNode;
 }
 
 const Calendar = ({
   baseDate,
-  setBaseDate,
   data,
-  setSelectedDate,
-  toggleModal,
+  setBaseDate,
+  onClickCell,
   children
 }: CalendarProps) => {
   const onClickPrevMonth = () => {
-    const selectedMonth = baseDate.getMonth();
-    const newDate = new Date(
-      baseDate.getFullYear(),
-      selectedMonth - 1,
-      1
-    );
-    setBaseDate(newDate);
+    setBaseDate(subMonths(baseDate, 1));
   }
   const onClickNextMonth = () => {
-    const selectedMonth = baseDate.getMonth();
-    const newDate = new Date(
-      baseDate.getFullYear(),
-      selectedMonth + 1,
-      1
-    );
-    setBaseDate(newDate);
+    setBaseDate(addMonths(baseDate, 1));
   }
 
   const endOfMonthDate: Date = endOfMonth(baseDate);
@@ -66,13 +53,7 @@ const Calendar = ({
     .fill(0)
     .map((_, i) => addDays(endOfMonthDate, i + 1));
 
-  const days = [
-    ...prevDays,
-    ...currentDays,
-    ...nextDays
-  ];
-
-
+  const days = [...prevDays, ...currentDays, ...nextDays];
 
   const groupedData = groupBy(data, item => item.key);
   const today: Date = new Date();
@@ -101,8 +82,7 @@ const Calendar = ({
                                date={day}
                                schedules={groupedData[key]}
                                onClick={() => {
-                                 setSelectedDate(day);
-                                 toggleModal();
+                                 onClickCell(day);
                                }} />;
         })}      
       </div>

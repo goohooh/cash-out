@@ -85,10 +85,13 @@ function App() {
     <div className="app">
       <h1 className="header txt-big">장부</h1>
       <Calendar baseDate={baseDate}
-                setSelectedDate={setSelectedDate}
+                // setSelectedDate={setSelectedDate}
                 setBaseDate={setDate}
                 data={schedules}
-                toggleModal={toggleModal}>
+                onClickCell={(date: Date) => {
+                  setSelectedDate(date);
+                  toggleModal();
+                }}>
         <TotalReport data={expenditures} />
       </Calendar>
       <Modal isShowing={isShowing}
