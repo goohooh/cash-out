@@ -1,6 +1,11 @@
-export type ExpenseType = "tax" | "card" | "utilityBill" | "tradePayable";
+export enum ExpenseType {
+  utilityBill = "utilityBill",
+  tax = "tax",
+  card = "card",
+  tradePayable = "tradePayable",
+}
 
-interface ExpenditureData {
+interface Param {
   name: string;
   amount: number;
   type: string;
@@ -15,7 +20,7 @@ class Expenditure {
   dueDateStart: Date;
   dueDateEnd: Date;
 
-  constructor(param: ExpenditureData) {
+  constructor(param: Param) {
     this.name = param.name;
     this.amount = param.amount;
     this.type = param.type;

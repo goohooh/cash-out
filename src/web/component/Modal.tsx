@@ -1,5 +1,5 @@
 import { FC } from "react";
-import Expenditure from "../../entity/expenditure";
+import Expenditure from "../../entity/model/expenditure";
 import styles from "./Modal.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { format } from "date-fns";

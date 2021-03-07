@@ -3,21 +3,18 @@ import {
   addDays,
   subDays,
   endOfMonth,
-  eachDayOfInterval,
   isSameMonth,
   isSameDay,
   format,
 } from "date-fns";
-import { numFormat } from "../../common/util";
 
-import Expenditure from "../../entity/expenditure";
+import Schedule from "../../entity/model/schedule";
 import { groupBy } from "../../common/util";
 
 // import Schedule from "./Schedule";
 import CalendarNavigator from "./CalendarNavigator";
 import CalendarCell from "./CalendarCell";
 import styles from "./Calendar.module.css";
-import Schedule from "../../entity/schedule";
 
 const weekdays = ["일", "월", "화", "수", "목", "금", "토"];
 
@@ -25,7 +22,7 @@ interface CalendarProps {
   baseDate: Date;
   setSelectedDate: (date: Date | null) => void;
   setBaseDate: (date: Date) => void;
-  data: Expenditure[];
+  data: Schedule[];
   toggleModal: () => void;
   children?: React.ReactNode;
 }
@@ -76,37 +73,8 @@ const Calendar = ({
   ];
 
 
-  const flatten = data
-    .map(d => {
-      const dayInterval: Date[] = eachDayOfInterval({
-        start: d.dueDateStart,
-        end: d.dueDateEnd,
-      });
 
-      if (dayInterval.length === 1) {
-        return new Schedule({
-          key: format(d.dueDateStart, "MM-dd"),
-          title: d.name,
-          subtitle: numFormat(d.amount),
-          date: d.dueDateStart,
-          color: ""
-        });
-      }
-
-      return dayInterval.map((dateObj, i, arr) => {
-        const isLast = i === arr.length - 1;
-        return new Schedule({
-          key: format(dateObj, "MM-dd"),
-          title: d.name,
-          subtitle: isLast ? numFormat(d.amount) : "",
-          date: dateObj,
-          color: ""
-        });
-      });
-    })
-    .flat();
-
-  const groupedData = groupBy(flatten, item => item.key);
+  const groupedData = groupBy(data, item => item.key);
   const today: Date = new Date();
 
   return (

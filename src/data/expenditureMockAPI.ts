@@ -1,5 +1,5 @@
 import ExpenditureRepo from "../repo/ExpenditureRepo";
-import Expenditure from "../entity/expenditure";
+import Expenditure from "../entity/model/expenditure";
 import mockData from "./data.json";
 
 export default class ExpenditureMockAPI implements ExpenditureRepo {

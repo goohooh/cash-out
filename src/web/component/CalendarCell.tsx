@@ -1,4 +1,4 @@
-import Schedule from "../../entity/schedule";
+import Schedule from "../../entity/model/schedule";
 import ScheduleChip from "./ScheduleChip";
 import styles from "./CalendarCell.module.css";
 
@@ -32,7 +32,9 @@ const CalendarCell = ({
         return (
           <ScheduleChip key={`${d.key}-${i}`}
                         title={d.title}
-                        subtitle={d.subtitle} />)
+                        subtitle={d.subtitle}
+                        color={d.color}
+                        background={d.background} />)
       })}
     </div>
   );

@@ -1,30 +1,30 @@
-import Expenditure from "../../entity/expenditure";
+import Expenditure, { ExpenseType } from "../../entity/model/expenditure";
 import styles from "./TotalReport.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { numFormat } from "../../common/util";
-
-interface TotalReportProps {
-  data: Expenditure[]
-}
 
 const sumAllAmount = (total: number = 0, expenditure: Expenditure) => {
   total += expenditure.amount;
   return total;
 };
 
+interface TotalReportProps {
+  data: Expenditure[]
+}
+
 const TotalReport = (props: TotalReportProps) => {
   // Todo: Generic과 무엇을 사용하면 filter의 콜백을 추출할 수 있을까
   const taxTotal: number = props.data
-    .filter((expenditure: Expenditure) => expenditure.type === "tax")
+    .filter((expenditure: Expenditure) => expenditure.type === ExpenseType.tax)
     .reduce(sumAllAmount, 0);
   const utilityBillTotal: number = props.data
-    .filter((expenditure: Expenditure) => expenditure.type === "utilityBill")
+    .filter((expenditure: Expenditure) => expenditure.type === ExpenseType.utilityBill)
     .reduce(sumAllAmount, 0);
   const cardBillTotal: number = props.data
-    .filter((expenditure: Expenditure) => expenditure.type === "card")
+    .filter((expenditure: Expenditure) => expenditure.type === ExpenseType.card)
     .reduce(sumAllAmount, 0);
   const tradePayableTotal: number = props.data
-    .filter((expenditure: Expenditure) => expenditure.type === "tradePayable")
+    .filter((expenditure: Expenditure) => expenditure.type === ExpenseType.card)
     .reduce(sumAllAmount, 0);
   
   const expenditureTotal = taxTotal + utilityBillTotal + cardBillTotal + tradePayableTotal;

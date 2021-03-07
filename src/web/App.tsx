@@ -1,8 +1,15 @@
 import { useEffect, useState, useMemo } from "react";
 import useModal from "./hook/useModal";
-import { startOfMonth } from "date-fns";
+import {
+  startOfMonth,
+  format,
+  eachDayOfInterval,
+} from "date-fns";
+import { numFormat } from "../common/util";
 
-import Expenditure from "../entity/expenditure";
+import Expenditure from "../entity/model/expenditure";
+import Schedule from "../entity/model/schedule";
+import { ExpenseTypeColorMap } from "../entity/structure/expenseTypeColorMap";
 import ExpenditureMockAPI from "../data/expenditureMockAPI";
 import ExpenditureRepo from "../repo/ExpenditureRepo";
 
@@ -42,13 +49,45 @@ function App() {
       });
   }, [baseDate]);
 
+  const series = expenditures
+    .map(d => {
+      const dayInterval: Date[] = eachDayOfInterval({
+        start: d.dueDateStart,
+        end: d.dueDateEnd,
+      });
+
+      if (dayInterval.length === 1) {
+        return new Schedule({
+          key: format(d.dueDateStart, "MM-dd"),
+          title: d.name,
+          subtitle: numFormat(d.amount),
+          date: d.dueDateStart,
+          color: ExpenseTypeColorMap[d.type].color,
+          background: ExpenseTypeColorMap[d.type].background,
+        });
+      }
+
+      return dayInterval.map((dateObj, i, arr) => {
+        const isLast = i === arr.length - 1;
+        return new Schedule({
+          key: format(dateObj, "MM-dd"),
+          title: d.name,
+          subtitle: isLast ? numFormat(d.amount) : "",
+          date: dateObj,
+          color: ExpenseTypeColorMap[d.type].color,
+          background: ExpenseTypeColorMap[d.type].background,
+        });
+      });
+    })
+    .flat();
+
   return (
     <div className="app">
       <h1 className="header txt-big">장부</h1>
       <Calendar baseDate={baseDate}
                 setSelectedDate={setSelectedDate}
                 setBaseDate={setDate}
-                data={expenditures}
+                data={series}
                 toggleModal={toggleModal}>
         <TotalReport data={expenditures} />
       </Calendar>
