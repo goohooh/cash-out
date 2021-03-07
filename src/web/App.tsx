@@ -68,6 +68,7 @@ function App() {
         });
       }
 
+      // 납부 기한이 하루 이상인 경우
       return dayInterval.map((dateObj, i, arr) => {
         const isLast = i === arr.length - 1;
         return new Schedule({
