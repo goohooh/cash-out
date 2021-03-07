@@ -5,7 +5,7 @@ import {
     faTimes,
     faCheckSquare,
     faClipboardCheck,
-    faExclamationCircle,
+    faInfoCircle,
 } from '@fortawesome/free-solid-svg-icons';
 
 library.add(faChevronLeft);
@@ -13,4 +13,4 @@ library.add(faChevronRight);
 library.add(faTimes);
 library.add(faCheckSquare);
 library.add(faClipboardCheck);
-library.add(faExclamationCircle);
+library.add(faInfoCircle);

@@ -7,6 +7,9 @@ import {
 } from "date-fns";
 import { numFormat } from "../common/util";
 
+import "./App.css";
+import "./Fontawesome";
+
 import Expenditure from "../entity/model/expenditure";
 import Schedule from "../entity/model/schedule";
 import { ExpenseTypeColorMap } from "../entity/structure/expenseTypeColorMap";
@@ -16,9 +19,7 @@ import ExpenditureRepo from "../repo/ExpenditureRepo";
 import TotalReport from "./component/TotalReport";
 import Calendar from "./component/Calendar";
 import Modal from "./component/Modal";
-
-import "./App.css";
-import "./Fontawesome";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const expenditureRepo: ExpenditureRepo = new ExpenditureMockAPI();
 
@@ -98,6 +99,12 @@ function App() {
              hide={toggleModal}
              selectedDate={selectedDate}
              data={selectedExpenditures} />
+      <div className="notice">
+        <p>
+          <FontAwesomeIcon icon="info-circle" className="m-right-smallest" />
+          캘린더에서 각 일자를 누르면 자세한 정보를 제공합니다.
+        </p>
+      </div>
     </div>
   );
 }
