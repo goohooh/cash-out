@@ -49,7 +49,7 @@ function App() {
       });
   }, [baseDate]);
 
-  const series = expenditures
+  const schedules: Schedule[] = expenditures
     .map(d => {
       const dayInterval: Date[] = eachDayOfInterval({
         start: d.dueDateStart,
@@ -87,7 +87,7 @@ function App() {
       <Calendar baseDate={baseDate}
                 setSelectedDate={setSelectedDate}
                 setBaseDate={setDate}
-                data={series}
+                data={schedules}
                 toggleModal={toggleModal}>
         <TotalReport data={expenditures} />
       </Calendar>
