@@ -13,8 +13,9 @@ import Modal from "./component/Modal";
 import "./App.css";
 import "./Fontawesome";
 
+const expenditureRepo: ExpenditureRepo = new ExpenditureMockAPI();
+
 function App() {
-  const [expenditureRepo] = useState<ExpenditureRepo>(() => new ExpenditureMockAPI());
   const [expenditures, setExpenditures] = useState<Expenditure[]>([]);
   const [selectedDate, setSelectedDate] = useState<number | null>(null)
   const [baseDate, setDate] = useState<Date>(() => startOfMonth(new Date()));
@@ -34,7 +35,7 @@ function App() {
       .then(expenditures => {
         setExpenditures(expenditures)
       });
-  }, [expenditureRepo, baseDate]);
+  }, [baseDate]);
 
   return (
     <div className="app">
