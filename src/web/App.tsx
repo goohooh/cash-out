@@ -54,6 +54,7 @@ function App() {
       </Calendar>
       <Modal isShowing={isShowing}
              hide={toggleModal}
+             selectedDate={selectedDate}
              data={selectedExpenditures} />
     </div>
   );
