@@ -3,5 +3,13 @@
 }
 
 .chip p {
-    text-indent: 1px;
+    padding: 0.2rem;
+    text-align: center;
+    word-break: keep-all;
+}
+
+.chip p:last-of-type {
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
 }

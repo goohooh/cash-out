@@ -1,7 +1,5 @@
 .cell {
-    width: 100%;
-    flex-basis: 14.25%;
-    flex-grow: 1;
+    width: calc(100% * 1/7);
     min-height: 70px;
     border-right: 1px solid #dadada;
     border-bottom: 1px solid #dadada;
