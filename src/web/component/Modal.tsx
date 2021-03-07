@@ -2,6 +2,7 @@ import { FC } from "react";
 import Expenditure from "../../entity/expenditure";
 import styles from "./Modal.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { numFormat } from "../../common/util";
 
 interface ModalProps {
   isShowing: boolean;
@@ -27,7 +28,7 @@ const Modal: FC<ModalProps> = ({ isShowing, hide, data }) => {
 
           <div className={styles.total}>
             <h4>총 출금</h4>
-            <strong>{total} 원</strong>
+            <strong>{numFormat(total)} 원</strong>
           </div>
 
           <ul>
@@ -37,7 +38,7 @@ const Modal: FC<ModalProps> = ({ isShowing, hide, data }) => {
                     className={styles.item}>
                   <span>{exp.name}</span>
                   <span>
-                    {exp.amount} 원
+                    {numFormat(exp.amount)} 원
                     <FontAwesomeIcon icon="chevron-right" className="m-left-smallest" />
                   </span>
                 </li>

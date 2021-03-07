@@ -1,4 +1,4 @@
-type expenseType = "tax" | "card" | "utilityBill" | "tradePayable";
+export type ExpenseType = "tax" | "card" | "utilityBill" | "tradePayable";
 
 interface ExpenditureData {
   name: string;
@@ -6,7 +6,6 @@ interface ExpenditureData {
   type: string;
   dueDateStart: string;
   dueDateEnd: string;
-  // readonly paid: boolean;
 }
 
 class Expenditure {

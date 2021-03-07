@@ -1,6 +1,7 @@
 import Expenditure from "../../entity/expenditure";
 import styles from "./TotalReport.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { numFormat } from "../../common/util";
 
 interface TotalReportProps {
   data: Expenditure[]
@@ -33,35 +34,51 @@ const TotalReport = (props: TotalReportProps) => {
       <ul className={`${styles.container} flex flex-wrap`}>
         <li className={styles.category}>
           <span>
-            <FontAwesomeIcon icon="check-square" /> 공과금
+            <FontAwesomeIcon icon="check-square"
+                             className="utility-bill-light-color m-right-smallest" />
+            공과금
           </span>
-          <strong>{utilityBillTotal}</strong>
+          <strong className="utility-bill-light-color">
+            {numFormat(utilityBillTotal)}원
+            </strong>
         </li>
 
         <li className={styles.category}>
           <span>
-            <FontAwesomeIcon icon="check-square" /> 세금
+            <FontAwesomeIcon icon="check-square"
+                             className="tax-color m-right-smallest" />
+            세금
           </span>
-          <strong>{taxTotal}원</strong>
+          <strong className="tax-color">
+            {numFormat(taxTotal)}원
+          </strong>
         </li>
 
         <li className={styles.category}>
           <span>
-            <FontAwesomeIcon icon="check-square" /> 카드 청구액
+            <FontAwesomeIcon icon="check-square"
+                             className="card-color m-right-smallest" />
+            카드 청구액
           </span>
-          <strong>{cardBillTotal}원</strong>
+          <strong className="card-color">
+            {numFormat(cardBillTotal)}원
+          </strong>
         </li>
 
         <li className={styles.category}>
           <span>
-            <FontAwesomeIcon icon="check-square" /> 거래처대금
+            <FontAwesomeIcon icon="check-square"
+                             className="trade-payable-color m-right-smallest" />
+            거래처대금
           </span>
-          <strong>{tradePayableTotal}원</strong>
+          <strong className="trade-payable-color">
+            {numFormat(tradePayableTotal)}원
+          </strong>
         </li>
       </ul>
       <div className={styles.total}>
         <span className="m-right-smallest">총 출금액</span>
-        <strong>{expenditureTotal}원</strong>
+        <strong>{numFormat(expenditureTotal)}원</strong>
       </div>
     </div>
   );

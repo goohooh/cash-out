@@ -17,14 +17,19 @@ const expenditureRepo: ExpenditureRepo = new ExpenditureMockAPI();
 
 function App() {
   const [expenditures, setExpenditures] = useState<Expenditure[]>([]);
-  const [selectedDate, setSelectedDate] = useState<number | null>(null)
+  const [selectedDate, setSelectedDate] = useState<Date | null>(null)
   const [baseDate, setDate] = useState<Date>(() => startOfMonth(new Date()));
+
+  const { isShowing, toggleModal } = useModal();
+
   const selectedExpenditures = useMemo<Expenditure[]>(() => {
     return selectedDate
-      ? expenditures.filter(exp => exp.dueDateStart.getDate() <= selectedDate)
+      ? expenditures
+        .filter(({ dueDateStart }) => {
+          return dueDateStart.getDate() <= selectedDate.getDate();
+        })
       : [];
   }, [selectedDate, expenditures]);
-  const { isShowing, toggle } = useModal();
 
   useEffect(() => {
     expenditureRepo
@@ -33,7 +38,7 @@ function App() {
         baseDate.getMonth()
       )
       .then(expenditures => {
-        setExpenditures(expenditures)
+        setExpenditures(expenditures);
       });
   }, [baseDate]);
 
@@ -41,15 +46,14 @@ function App() {
     <div className="app">
       <h1 className="header txt-big">장부</h1>
       <Calendar baseDate={baseDate}
-                selectedDate={selectedDate}
                 setSelectedDate={setSelectedDate}
-                setDate={setDate}
+                setBaseDate={setDate}
                 data={expenditures}
-                toggle={toggle}>
+                toggleModal={toggleModal}>
         <TotalReport data={expenditures} />
       </Calendar>
       <Modal isShowing={isShowing}
-             hide={toggle}
+             hide={toggleModal}
              data={selectedExpenditures} />
     </div>
   );

@@ -88,3 +88,50 @@ ul, ol {
 .w-100 {
     width: 100%;
 }
+
+/* Todo: Modularize, styled component? */
+.utility-bill-color {
+    color: #C53A51;
+}
+
+.utility-bill-light-color {
+    color: #F6B352;
+}
+
+.utility-bill-light-bg {
+    background: rgba(255, 230, 192, 1);
+}
+
+.tax-color {
+    color: #0B357E;
+}
+
+.tax-light-color {
+    color: rgba(217, 243, 255, 1);
+}
+
+.tax-light-bg {
+    background: rgba(217, 243, 255, 1);
+}
+
+.card-color {
+    color: #9055A2;
+}
+
+.card-light-color {
+    color: rgba(232, 219, 240, 1);
+}
+
+.card-light-bg {
+    background: rgba(232, 219, 240, 1);
+}
+
+.trade-payable-color {
+    color: #07A8AD;
+}
+.trade-payable-light-color {
+    color: rgba(207, 240, 218, 1);
+}
+.trade-payable-light-bg {
+    background: rgba(207, 240, 218, 1);
+}

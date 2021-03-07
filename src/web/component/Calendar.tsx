@@ -8,6 +8,7 @@ import {
   isSameDay,
   format,
 } from "date-fns";
+import { numFormat } from "../../common/util";
 
 import Expenditure from "../../entity/expenditure";
 import { groupBy } from "../../common/util";
@@ -22,21 +23,19 @@ const weekdays = ["일", "월", "화", "수", "목", "금", "토"];
 
 interface CalendarProps {
   baseDate: Date;
-  selectedDate: number | null;
-  setSelectedDate: (date: number | null) => void;
-  setDate: (date: Date) => void;
+  setSelectedDate: (date: Date | null) => void;
+  setBaseDate: (date: Date) => void;
   data: Expenditure[];
-  toggle: () => void;
+  toggleModal: () => void;
   children?: React.ReactNode;
 }
 
 const Calendar = ({
   baseDate,
-  setDate,
+  setBaseDate,
   data,
   setSelectedDate,
-  selectedDate,
-  toggle,
+  toggleModal,
   children
 }: CalendarProps) => {
   const onClickPrevMonth = () => {
@@ -46,7 +45,7 @@ const Calendar = ({
       selectedMonth - 1,
       1
     );
-    setDate(newDate);
+    setBaseDate(newDate);
   }
   const onClickNextMonth = () => {
     const selectedMonth = baseDate.getMonth();
@@ -55,7 +54,7 @@ const Calendar = ({
       selectedMonth + 1,
       1
     );
-    setDate(newDate);
+    setBaseDate(newDate);
   }
 
   const endOfMonthDate: Date = endOfMonth(baseDate);
@@ -88,7 +87,7 @@ const Calendar = ({
         return new Schedule({
           key: format(d.dueDateStart, "MM-dd"),
           title: d.name,
-          subtitle: d.amount.toString(),
+          subtitle: numFormat(d.amount),
           date: d.dueDateStart,
           color: ""
         });
@@ -99,7 +98,7 @@ const Calendar = ({
         return new Schedule({
           key: format(dateObj, "MM-dd"),
           title: d.name,
-          subtitle: isLast ? d.amount.toString() : "",
+          subtitle: isLast ? numFormat(d.amount) : "",
           date: dateObj,
           color: ""
         });
@@ -127,7 +126,6 @@ const Calendar = ({
       <div className={styles.days}>
         {days.map(day => {
           const key = format(day, "MM-dd");
-          const date = day.getDate();
 
           return <CalendarCell key={key}
                                isToday={isSameDay(day, today)}
@@ -135,8 +133,8 @@ const Calendar = ({
                                date={day}
                                schedules={groupedData[key]}
                                onClick={() => {
-                                 setSelectedDate(date);
-                                 toggle();
+                                 setSelectedDate(day);
+                                 toggleModal();
                                }} />;
         })}      
       </div>
