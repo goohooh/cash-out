@@ -1,18 +1,13 @@
 import { useEffect, useState, useMemo, useCallback } from "react";
 import useModal from "./hook/useModal";
-import {
-  startOfMonth,
-  format,
-  eachDayOfInterval,
-} from "date-fns";
-import { numFormat } from "../common/util";
+import { startOfMonth } from "date-fns";
 
 import "./App.css";
 import "./Fontawesome";
 
 import Expenditure from "../entity/model/expenditure";
 import Schedule from "../entity/model/schedule";
-import { ExpenseTypeColorMap } from "../entity/structure/expenseTypeColorMap";
+import { expenditureToSchedule } from "../entity/transfer";
 import ExpenditureMockAPI from "../data/expenditureMockAPI";
 import ExpenditureRepo from "../repo/ExpenditureRepo";
 
@@ -42,39 +37,8 @@ function App() {
   }, [baseDate]);
 
   const schedules: Schedule[] = useMemo(() => {
-    return expenditures
-      .map(d => {
-        const dayInterval: Date[] = eachDayOfInterval({
-          start: d.dueDateStart,
-          end: d.dueDateEnd,
-        });
-
-        if (dayInterval.length === 1) {
-          return new Schedule({
-            key: format(d.dueDateStart, "MM-dd"),
-            title: d.name,
-            subtitle: numFormat(d.amount),
-            date: d.dueDateStart,
-            color: ExpenseTypeColorMap[d.type].color,
-            background: ExpenseTypeColorMap[d.type].background,
-          });
-        }
-
-        // 납부 기한이 하루 이상인 경우
-        return dayInterval.map((dateObj, i, arr) => {
-          const isLast = i === arr.length - 1;
-          return new Schedule({
-            key: format(dateObj, "MM-dd"),
-            title: d.name,
-            subtitle: isLast ? numFormat(d.amount) : "",
-            date: dateObj,
-            color: ExpenseTypeColorMap[d.type].color,
-            background: ExpenseTypeColorMap[d.type].background,
-          });
-        });
-      })
-      .flat();
-  }, [expenditures])
+    return expenditureToSchedule(expenditures);
+  }, [expenditures]);
 
   const onClickCell = useCallback((date: Date) => {
     setSelectedDate(date);
