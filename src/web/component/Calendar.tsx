@@ -34,7 +34,6 @@ const Calendar = React.memo(({
   onClickCell,
   children
 }: CalendarProps) => {
-  console.log('calendar')
   const onClickPrevMonth = () => {
     setBaseDate(subMonths(baseDate, 1));
   }

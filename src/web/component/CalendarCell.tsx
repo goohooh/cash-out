@@ -17,7 +17,6 @@ const CalendarCell = ({
   schedules,
   onClick,
 }: Props) => {
-  console.log('cell')
   return (
     <div className={styles.cell} onClick={onClick}>
       {isSameMonth

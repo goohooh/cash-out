@@ -79,7 +79,7 @@ function App() {
   const onClickCell = useCallback((date: Date) => {
     setSelectedDate(date);
     toggleModal();
-  }, []);
+  }, [toggleModal]);
 
   return (
     <div className="app">
