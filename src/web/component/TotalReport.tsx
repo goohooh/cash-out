@@ -23,15 +23,19 @@ const TotalReport = ({ data, filters, setFilters }: TotalReportProps) => {
   // Todo: Generic과 무엇을 사용하면 filter의 콜백을 추출할 수 있을까
   const taxTotal: number = data
     .filter((expenditure: Expenditure) => expenditure.type === ExpenseType.tax)
+    .filter((expenditure: Expenditure) => !filters.some(filter => expenditure.type === filter))
     .reduce(sumAllAmount, 0);
   const utilityBillTotal: number = data
     .filter((expenditure: Expenditure) => expenditure.type === ExpenseType.utilityBill)
+    .filter((expenditure: Expenditure) => !filters.some(filter => expenditure.type === filter))
     .reduce(sumAllAmount, 0);
   const cardBillTotal: number = data
     .filter((expenditure: Expenditure) => expenditure.type === ExpenseType.card)
+    .filter((expenditure: Expenditure) => !filters.some(filter => expenditure.type === filter))
     .reduce(sumAllAmount, 0);
   const tradePayableTotal: number = data
-    .filter((expenditure: Expenditure) => expenditure.type === ExpenseType.card)
+    .filter((expenditure: Expenditure) => expenditure.type === ExpenseType.tradePayable)
+    .filter((expenditure: Expenditure) => !filters.some(filter => expenditure.type === filter))
     .reduce(sumAllAmount, 0);
   
   const expenditureTotal = taxTotal + utilityBillTotal + cardBillTotal + tradePayableTotal;
