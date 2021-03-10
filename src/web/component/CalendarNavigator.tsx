@@ -1,7 +1,7 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import styles from "./CalendarNavigator.module.css";
 
-interface Props {
+export interface Props {
   baseDate: Date;
   onClickPrevMonth: () => void;
   onClickNextMonth: () => void;

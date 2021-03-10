@@ -38,7 +38,7 @@ const Modal: FC<ModalProps> = ({
 
   return isShowing
     ? (
-      <div className={styles.dimmed}>
+      <div className={styles.dimmed} onClick={hide}>
         <div className={styles.modal}>
           <div className="modal-header flex justify-between align-center">
             <h3 className={styles.title}>
