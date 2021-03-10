@@ -33,9 +33,13 @@ function App() {
         baseDate.getMonth()
       )
       .then(expenditures => {
-        setExpenditures(expenditures);
+        setExpenditures(
+          expenditures.filter(expenditure =>
+            !filters.some(filter => filter === expenditure.type)
+          )
+        );
       });
-  }, [baseDate]);
+  }, [baseDate, filters]);
 
   const schedules: Schedule[] = useMemo(() => {
     return expenditureToSchedule(expenditures);
@@ -52,8 +56,7 @@ function App() {
       <Calendar baseDate={baseDate}
                 setBaseDate={setDate}
                 data={schedules}
-                onClickCell={onClickCell}
-                filters={filters}>
+                onClickCell={onClickCell}>
         <TotalReport data={expenditures}
                      filters={filters}
                      setFilters={setFilters} />

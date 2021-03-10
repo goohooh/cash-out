@@ -22,7 +22,6 @@ const weekdays = ["일", "월", "화", "수", "목", "금", "토"];
 interface CalendarProps {
   baseDate: Date;
   data: Schedule[];
-  filters: string[];
   setBaseDate: (date: Date) => void;
   onClickCell: (date: Date) => void;
   children?: React.ReactNode;
@@ -33,7 +32,6 @@ const Calendar = React.memo(({
   data,
   setBaseDate,
   onClickCell,
-  filters,
   children
 }: CalendarProps) => {
   const onClickPrevMonth = () => {
@@ -91,9 +89,8 @@ const Calendar = React.memo(({
       </div>
     </div>
   );
+}, (prev, cur) => {
+  return prev.data === cur.data;
 });
-// }, (prev, cur) => {
-//   return prev.data === cur.data;
-// });
 
 export default Calendar;
