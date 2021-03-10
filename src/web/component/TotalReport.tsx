@@ -1,7 +1,7 @@
 import Expenditure, { ExpenseType } from "../../entity/model/expenditure";
 import styles from "./TotalReport.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { numFormat } from "../../common/util";
+import { numFormat } from "../common/util";
 
 const sumAllAmount = (total: number = 0, expenditure: Expenditure) => {
   total += expenditure.amount;

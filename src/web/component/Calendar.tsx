@@ -11,7 +11,7 @@ import {
 } from "date-fns";
 
 import Schedule from "../../entity/model/schedule";
-import { groupBy } from "../../common/util";
+import { groupBy } from "../common/util";
 
 import CalendarNavigator from "./CalendarNavigator";
 import CalendarCell from "./CalendarCell";
