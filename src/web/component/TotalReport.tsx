@@ -9,33 +9,60 @@ const sumAllAmount = (total: number = 0, expenditure: Expenditure) => {
 };
 
 interface TotalReportProps {
-  data: Expenditure[]
+  data: Expenditure[];
+  filters: string[];
+  setFilters: (filter: string[]) => void;
 }
 
-const TotalReport = (props: TotalReportProps) => {
+const UnCheckedIcon = () =>
+  <FontAwesomeIcon icon="check-square"
+                   color="#eee"
+                   className="m-right-smallest" />
+
+const TotalReport = ({ data, filters, setFilters }: TotalReportProps) => {
   // Todo: Generic과 무엇을 사용하면 filter의 콜백을 추출할 수 있을까
-  const taxTotal: number = props.data
+  const taxTotal: number = data
     .filter((expenditure: Expenditure) => expenditure.type === ExpenseType.tax)
     .reduce(sumAllAmount, 0);
-  const utilityBillTotal: number = props.data
+  const utilityBillTotal: number = data
     .filter((expenditure: Expenditure) => expenditure.type === ExpenseType.utilityBill)
     .reduce(sumAllAmount, 0);
-  const cardBillTotal: number = props.data
+  const cardBillTotal: number = data
     .filter((expenditure: Expenditure) => expenditure.type === ExpenseType.card)
     .reduce(sumAllAmount, 0);
-  const tradePayableTotal: number = props.data
+  const tradePayableTotal: number = data
     .filter((expenditure: Expenditure) => expenditure.type === ExpenseType.card)
     .reduce(sumAllAmount, 0);
   
   const expenditureTotal = taxTotal + utilityBillTotal + cardBillTotal + tradePayableTotal;
 
+  const toggleFilter = (filter: string) => {
+    const index = filters.indexOf(filter);
+    if (index === -1) {
+      setFilters([...filters, filter]);
+    } else {
+      const newFilters = [...filters];
+      newFilters.splice(index, 1);
+      setFilters(newFilters)
+    }
+  }
+
   return (
     <div>
       <ul className={`${styles.container} flex flex-wrap`}>
-        <li className={styles.category}>
+        <li className={styles.category}
+            onClick={() => {
+              toggleFilter(ExpenseType.utilityBill);
+            }}>
           <span>
-            <FontAwesomeIcon icon="check-square"
-                             className="utility-bill-light-color m-right-smallest" />
+            {
+              filters.some(filter => filter === ExpenseType.utilityBill)
+                ? <UnCheckedIcon />
+                : <FontAwesomeIcon icon="check-square"
+                                   className="utility-bill-light-color m-right-smallest" />
+            }
+            {/* <FontAwesomeIcon icon="check-square"
+                             className="utility-bill-light-color m-right-smallest" /> */}
             공과금
           </span>
           <strong className="utility-bill-light-color">
@@ -43,10 +70,19 @@ const TotalReport = (props: TotalReportProps) => {
             </strong>
         </li>
 
-        <li className={styles.category}>
+        <li className={styles.category}
+            onClick={() => {
+              toggleFilter(ExpenseType.tax);
+            }}>
           <span>
-            <FontAwesomeIcon icon="check-square"
-                             className="tax-color m-right-smallest" />
+            {
+              filters.find(filter => filter === ExpenseType.tax)
+                ? <UnCheckedIcon />
+                : <FontAwesomeIcon icon="check-square"
+                                   className="tax-color m-right-smallest" />
+            }
+            {/* <FontAwesomeIcon icon="check-square"
+                             className="tax-color m-right-smallest" /> */}
             세금
           </span>
           <strong className="tax-color">
@@ -54,10 +90,19 @@ const TotalReport = (props: TotalReportProps) => {
           </strong>
         </li>
 
-        <li className={styles.category}>
+        <li className={styles.category}
+            onClick={() => {
+              toggleFilter(ExpenseType.card);
+            }}>
           <span>
-            <FontAwesomeIcon icon="check-square"
-                             className="card-color m-right-smallest" />
+            {
+              filters.find(filter => filter === ExpenseType.card)
+                ? <UnCheckedIcon />
+                : <FontAwesomeIcon icon="check-square"
+                                   className="card-color m-right-smallest" />
+            }
+            {/* <FontAwesomeIcon icon="check-square"
+                             className="card-color m-right-smallest" /> */}
             카드 청구액
           </span>
           <strong className="card-color">
@@ -65,10 +110,19 @@ const TotalReport = (props: TotalReportProps) => {
           </strong>
         </li>
 
-        <li className={styles.category}>
+        <li className={styles.category}
+            onClick={() => {
+              toggleFilter(ExpenseType.tradePayable);
+            }}>
           <span>
-            <FontAwesomeIcon icon="check-square"
-                             className="trade-payable-color m-right-smallest" />
+            {
+              filters.find(filter => filter === ExpenseType.tradePayable)
+                ? <UnCheckedIcon />
+                : <FontAwesomeIcon icon="check-square"
+                                   className="trade-payable-color m-right-smallest" />
+            }
+            {/* <FontAwesomeIcon icon="check-square"
+                             className="trade-payable-color m-right-smallest" /> */}
             거래처대금
           </span>
           <strong className="trade-payable-color">

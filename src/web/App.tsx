@@ -20,8 +20,9 @@ const expenditureRepo: ExpenditureRepo = new ExpenditureMockAPI();
 
 function App() {
   const [expenditures, setExpenditures] = useState<Expenditure[]>([]);
-  const [selectedDate, setSelectedDate] = useState<Date | null>(null)
+  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [baseDate, setDate] = useState<Date>(() => startOfMonth(new Date()));
+  const [filters, setFilters] = useState<string[]>([]);
 
   const { isShowing, toggleModal } = useModal();
 
@@ -51,8 +52,11 @@ function App() {
       <Calendar baseDate={baseDate}
                 setBaseDate={setDate}
                 data={schedules}
-                onClickCell={onClickCell}>
-        <TotalReport data={expenditures} />
+                onClickCell={onClickCell}
+                filters={filters}>
+        <TotalReport data={expenditures}
+                     filters={filters}
+                     setFilters={setFilters} />
       </Calendar>
       <Modal isShowing={isShowing}
              hide={toggleModal}
