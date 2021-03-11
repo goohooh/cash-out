@@ -4,18 +4,8 @@
 }
 
 .category {
-    display: flex;
     padding: 0.5rem 1rem;
-    justify-content: space-between;
     width: 50%;
-
-    overflow:hidden;
-}
-
-.category > * {
-    overflow:hidden;
-    text-overflow:ellipsis;
-    white-space:nowrap;
 }
 
 .total {

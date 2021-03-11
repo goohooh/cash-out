@@ -1,0 +1,13 @@
+.box {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+
+    overflow:hidden;
+}
+
+.box > * {
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+}
