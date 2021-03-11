@@ -56,6 +56,21 @@ React에서 Clean architecture를 적용한 사례들을 살펴보고 현재 프
     - **component**: UI 컴포넌트
     - **hook**: 커스텀 react hook
 
+# Test
+
+jest + react-testing-library를 사용 했습니다.
+
+- CRA에서 기본으로 세팅해 줍니다.
+  - 현재 제약된 시간 안에서 사용하기 가장 최적입니다
+- jest는 다양한 기능을 제공합니다. 
+  - 일례로 mocha를 사용할 경우 별도 라이브러리를 설치해야 합니다
+  - DOM 테스트가 가능합니다. 역시나 mocha의 경우 별도 설치를 해야합니다
+- react-testing-library
+  - 컴포넌트의 상태보다 화면에 보이는 부분, 실제 동작 방식을 테스트 합니다
+  - 사실 유저는 컴포넌트 내부구현은 신경 쓰지 않고, 실제 동작만을 확인합니다
+  - 이에 test또한 그런식으로 이루어져야 한다는 BDD 스타일을 따르고 있고, 저 또한 Codecept.JS를 이용한 E2E 시스템을 만들면서 BDD 스타일에 만은 영향을 받았습니다.
+  - Enzyme의 경우 컴포넌트의 내부 구현을 테스트하게 되는데, 사실 이는 유저 입장에서 제대로 보이는지와는 별개의 테스트입니다.
+
 _references_
 - https://github.com/RostislavDugin/clean-architecture-react-typescript
 - https://github.com/falsy/react-with-clean-architecture
