@@ -3,11 +3,13 @@ import { ExpenseType } from "../model/expenditure";
 export interface Color {
   color: string,
   background: string,
+  colorLight?: string,
 }
 
 export const ExpenseTypeColorMap: Record<string, Color> = {
   [ExpenseType.utilityBill]: {
     color: "#C53A51",
+    colorLight: "#F6B352",
     background: "rgba(255, 230, 192, 1)",
   },
   [ExpenseType.tax]: {
