@@ -1,10 +1,10 @@
 import { FC } from "react";
 import { useMemo } from "react";
-import Expenditure from "../../entity/model/expenditure";
+import Expenditure from "../../../entity/model/expenditure";
 import styles from "./Modal.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { format } from "date-fns";
-import { numFormat } from "../common/util";
+import { numFormat } from "../../common/util";
 
 interface ModalProps {
   isShowing: boolean;

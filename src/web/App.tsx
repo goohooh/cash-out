@@ -11,9 +11,9 @@ import { expenditureToSchedule } from "./common/transfer";
 import ExpenditureMockAPI from "../data/expenditureMockAPI";
 import ExpenditureRepo from "../repo/ExpenditureRepo";
 
-import TotalReport from "./component/TotalReport";
-import Calendar from "./component/Calendar";
-import Modal from "./component/Modal";
+import TotalReport from "./component/report/TotalReport";
+import Calendar from "./component/calendar/Calendar";
+import Modal from "./component/modal/Modal";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const expenditureRepo: ExpenditureRepo = new ExpenditureMockAPI();

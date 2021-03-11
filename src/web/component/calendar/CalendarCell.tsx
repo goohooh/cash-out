@@ -1,4 +1,4 @@
-import Schedule from "../../entity/model/schedule";
+import Schedule from "../../../entity/model/schedule";
 import ScheduleChip from "./ScheduleChip";
 import styles from "./CalendarCell.module.css";
 

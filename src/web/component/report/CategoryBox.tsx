@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { numFormat } from "../common/util";
+import { numFormat } from "../../common/util";
 import styles from "./CategoryBox.module.css";
 
 interface CategoryBoxProps {

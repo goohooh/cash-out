@@ -1,7 +1,7 @@
-import Expenditure, { ExpenseType } from "../../entity/model/expenditure";
-import { ExpenseTypeColorMap } from "../../entity/structure/expenseTypeColorMap";
+import Expenditure, { ExpenseType } from "../../../entity/model/expenditure";
+import { ExpenseTypeColorMap } from "../../../entity/structure/expenseTypeColorMap";
 import styles from "./TotalReport.module.css";
-import { numFormat } from "../common/util";
+import { numFormat } from "../../common/util";
 import CategoryBox from "./CategoryBox";
 
 const sumAllAmount = (total: number = 0, expenditure: Expenditure) => {

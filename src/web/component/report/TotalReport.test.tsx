@@ -3,8 +3,8 @@ import TotalReport, { TotalReportProps } from './TotalReport';
 
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faCheckSquare } from '@fortawesome/free-solid-svg-icons';
-import Expenditure, { ExpenseType } from '../../entity/model/expenditure';
-import { numFormat } from "../common/util";
+import Expenditure, { ExpenseType } from '../../../entity/model/expenditure';
+import { numFormat } from "../../common/util";
 
 library.add(faCheckSquare);
 
