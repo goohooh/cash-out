@@ -45,7 +45,7 @@ const Modal: FC<ModalProps> = ({
               {selectedDate && format(selectedDate, "M월 d일")}
               비용 출금 정보
             </h3>
-            <button className={styles.close} onClick={hide}>
+            <button className={styles.close} onClick={e => { e.stopPropagation(); hide(); }}>
               <FontAwesomeIcon icon="times" size="2x" />
             </button>
           </div>
