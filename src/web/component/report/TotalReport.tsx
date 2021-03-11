@@ -73,7 +73,7 @@ const TotalReport = ({ data, filters, setFilters }: TotalReportProps) => {
 
         <li className={styles.category}
             onClick={() => toggleFilter(ExpenseType.tradePayable)}>
-            <CategoryBox color={ExpenseTypeColorMap.card.color}
+            <CategoryBox color={ExpenseTypeColorMap.tradePayable.color}
                          label="거래처대금"
                          amount={tradePayableTotal}
                          unchecked={filterSet.has(ExpenseType.tradePayable)} />
