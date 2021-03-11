@@ -28,7 +28,7 @@ describe("render navigator properly", () => {
       expect(nextMonthText).toBeInTheDocument();
     });
   });
-})
+});
 
 function renderCalendarNavigator(props: Partial<Props> = {}) {
     const defaultProps: Props = {
