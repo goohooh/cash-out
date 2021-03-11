@@ -18,10 +18,18 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const expenditureRepo: ExpenditureRepo = new ExpenditureMockAPI();
 
+const urlParams = new URLSearchParams(window.location.search);
+const year = parseInt(urlParams.get("year") || "");
+const month = parseInt(urlParams.get("month") || "");
+
+const _baseDate = year && month
+  ? new Date(year, month - 1, 1)
+  : startOfMonth(new Date());
+
 function App() {
   const [expenditures, setExpenditures] = useState<Expenditure[]>([]);
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
-  const [baseDate, setDate] = useState<Date>(() => startOfMonth(new Date()));
+  const [baseDate, setDate] = useState<Date>(_baseDate);
   const [filters, setFilters] = useState<string[]>([]);
 
   const { isShowing, toggleModal } = useModal();
