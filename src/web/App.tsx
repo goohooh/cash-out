@@ -5,7 +5,7 @@ import { startOfMonth } from "date-fns";
 import "./App.css";
 import "./Fontawesome";
 
-import Expenditure from "../entity/model/expenditure";
+import Expenditure, { ExpenseType } from "../entity/model/expenditure";
 import Schedule from "../entity/model/schedule";
 import { expenditureToSchedule } from "./common/transfer";
 import ExpenditureMockAPI from "../data/expenditureMockAPI";
@@ -26,8 +26,18 @@ const _baseDate = year && month
   ? new Date(year, month - 1, 1)
   : startOfMonth(new Date());
 
+const SET_EXPENDITURES = "SET_EXPENDITURES";
+const SET_FILTERED_EXPENDITURES = "SET_FILTERED_EXPENDITURES";
+const TOGGLE_FILTER = "TOGGLE_FILTER";
+
 interface AppReducer {
   (state: any, action: any): any;
+}
+
+function expendituresFilter(expenditures: Expenditure[], filters: string[]) {
+  return expenditures.filter(expenditure =>
+    !filters.some(filter => filter === expenditure.type)
+  );
 }
 
 const reducer: AppReducer = (state, action) => {
@@ -48,27 +58,49 @@ const reducer: AppReducer = (state, action) => {
         ...state,
         filters: newFilters,
       };
+    case SET_EXPENDITURES:
+      const newExpenditures = action.payload;
+      return {
+        ...state,
+        expenditures: newExpenditures,
+      }
+    case SET_FILTERED_EXPENDITURES:
+      return {
+        ...state,
+        filteredExpenditures: expendituresFilter(
+          state.expenditures,
+          state.filters
+        ),
+      }
     default:
       return state;
   }
 }
 
-const initialState = {
+interface AppState {
+  expenditures: Expenditure[],
+  filteredExpenditures: Expenditure[],
+  filters: ExpenseType[],
+  baseDate: Date,
+  selectedDate: Date | null,
+}
+
+const initialAppState: AppState = {
   expenditures: [],
+  filteredExpenditures: [],
   filters: [],
   baseDate: _baseDate,
   selectedDate: null,
 }
 
 function App() {
-  const [expenditures, setExpenditures] = useState<Expenditure[]>([]);
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [baseDate, setDate] = useState<Date>(_baseDate);
-  const [filters, setFilters] = useState<string[]>([]);
 
   const { isShowing, toggleModal } = useModal();
 
-  const [state, dispatch] = useReducer(reducer, initialState);
+  const [state, dispatch] = useReducer(reducer, initialAppState);
+  const { filteredExpenditures, filters } = state;
 
   useEffect(() => {
     expenditureRepo
@@ -77,17 +109,14 @@ function App() {
         baseDate.getMonth()
       )
       .then(expenditures => {
-        setExpenditures(
-          expenditures.filter(expenditure =>
-            !filters.some(filter => filter === expenditure.type)
-          )
-        );
+        dispatch({ type: SET_EXPENDITURES, payload: expenditures });
+        dispatch({ type: SET_FILTERED_EXPENDITURES });
       });
   }, [baseDate, filters]);
 
   const schedules: Schedule[] = useMemo(() => {
-    return expenditureToSchedule(expenditures);
-  }, [expenditures]);
+    return expenditureToSchedule(filteredExpenditures);
+  }, [filteredExpenditures]);
 
   const onClickCell = useCallback((date: Date) => {
     setSelectedDate(date);
@@ -101,14 +130,17 @@ function App() {
                 setBaseDate={setDate}
                 data={schedules}
                 onClickCell={onClickCell}>
-        <TotalReport data={expenditures}
+        <TotalReport data={filteredExpenditures}
                      filters={filters}
-                     setFilters={setFilters} />
+                     setFilters={(filter: ExpenseType) => {
+                       dispatch({ type: TOGGLE_FILTER, payload: filter});
+                       dispatch({ type: SET_FILTERED_EXPENDITURES });
+                     }} />
       </Calendar>
       <Modal isShowing={isShowing}
              hide={toggleModal}
              selectedDate={selectedDate}
-             data={expenditures} />
+             data={filteredExpenditures} />
       <div className="notice">
         <p>
           <FontAwesomeIcon icon="info-circle" className="m-right-smallest" />

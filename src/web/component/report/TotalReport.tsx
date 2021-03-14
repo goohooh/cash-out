@@ -12,7 +12,7 @@ const sumAllAmount = (total: number = 0, expenditure: Expenditure) => {
 export interface TotalReportProps {
   data: Expenditure[];
   filters: string[];
-  setFilters: (filter: string[]) => void;
+  setFilters: (filter: ExpenseType) => void;
 }
 
 const TotalReport = ({ data, filters, setFilters }: TotalReportProps) => {
@@ -33,22 +33,11 @@ const TotalReport = ({ data, filters, setFilters }: TotalReportProps) => {
   const expenditureTotal = taxTotal + utilityBillTotal + cardBillTotal + tradePayableTotal;
   const filterSet = new Set(filters);
 
-  const toggleFilter = (filter: string) => {
-    const index = filters.indexOf(filter);
-    if (index === -1) {
-      setFilters([...filters, filter]);
-    } else {
-      const newFilters = [...filters];
-      newFilters.splice(index, 1);
-      setFilters(newFilters)
-    }
-  }
-
   return (
     <div>
       <ul className={`${styles.container} flex flex-wrap`}>
         <li className={styles.category}
-            onClick={() => toggleFilter(ExpenseType.utilityBill)}>
+            onClick={() => setFilters(ExpenseType.utilityBill)}>
             <CategoryBox color={ExpenseTypeColorMap.utilityBill.colorLight}
                          label="공과금"
                          amount={utilityBillTotal}
@@ -56,7 +45,7 @@ const TotalReport = ({ data, filters, setFilters }: TotalReportProps) => {
         </li>
 
         <li className={styles.category}
-            onClick={() => toggleFilter(ExpenseType.tax)}>
+            onClick={() => setFilters(ExpenseType.tax)}>
             <CategoryBox color={ExpenseTypeColorMap.tax.color}
                          label="세금"
                          amount={taxTotal}
@@ -64,7 +53,7 @@ const TotalReport = ({ data, filters, setFilters }: TotalReportProps) => {
         </li>
 
         <li className={styles.category}
-            onClick={() => toggleFilter(ExpenseType.card)}>
+            onClick={() => setFilters(ExpenseType.card)}>
             <CategoryBox color={ExpenseTypeColorMap.card.color}
                          label="카드 청구액"
                          amount={cardBillTotal}
@@ -72,7 +61,7 @@ const TotalReport = ({ data, filters, setFilters }: TotalReportProps) => {
         </li>
 
         <li className={styles.category}
-            onClick={() => toggleFilter(ExpenseType.tradePayable)}>
+            onClick={() => setFilters(ExpenseType.tradePayable)}>
             <CategoryBox color={ExpenseTypeColorMap.tradePayable.color}
                          label="거래처대금"
                          amount={tradePayableTotal}
