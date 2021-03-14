@@ -1,4 +1,4 @@
-import { useEffect, useState, useMemo, useCallback } from "react";
+import { useEffect, useState, useMemo, useCallback, useReducer } from "react";
 import useModal from "./hook/useModal";
 import { startOfMonth } from "date-fns";
 
@@ -26,6 +26,40 @@ const _baseDate = year && month
   ? new Date(year, month - 1, 1)
   : startOfMonth(new Date());
 
+interface AppReducer {
+  (state: any, action: any): any;
+}
+
+const reducer: AppReducer = (state, action) => {
+  switch (action.type) {
+    case "TOGGLE_FILTER":
+      const filter = action.payload;
+      const { filters } = state;
+      const index = filters.indexOf(filter);
+
+      let newFilters = [];
+      if (index === -1) {
+        newFilters = [...filters, filter];
+      } else {
+        newFilters = [...filters];
+        newFilters.splice(index, 1);
+      }
+      return {
+        ...state,
+        filters: newFilters,
+      };
+    default:
+      return state;
+  }
+}
+
+const initialState = {
+  expenditures: [],
+  filters: [],
+  baseDate: _baseDate,
+  selectedDate: null,
+}
+
 function App() {
   const [expenditures, setExpenditures] = useState<Expenditure[]>([]);
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
@@ -33,6 +67,8 @@ function App() {
   const [filters, setFilters] = useState<string[]>([]);
 
   const { isShowing, toggleModal } = useModal();
+
+  const [state, dispatch] = useReducer(reducer, initialState);
 
   useEffect(() => {
     expenditureRepo
