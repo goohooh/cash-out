@@ -26,12 +26,26 @@ const _baseDate = year && month
   ? new Date(year, month - 1, 1)
   : startOfMonth(new Date());
 
-const SET_EXPENDITURES = "SET_EXPENDITURES";
-const SET_FILTERED_EXPENDITURES = "SET_FILTERED_EXPENDITURES";
-const TOGGLE_FILTER = "TOGGLE_FILTER";
+enum ActionTypes {
+  ToggleFilter,
+  SetExpenditures,
+  SetFilteredExpenditures,
+}
+
+type AppAction = {
+  type : ActionTypes.ToggleFilter
+  payload : ExpenseType,
+}
+| {
+  type : ActionTypes.SetExpenditures,
+  payload: Expenditure[],
+}
+| {
+  type : ActionTypes.SetFilteredExpenditures,
+}
 
 interface AppReducer {
-  (state: any, action: any): any;
+  (state: AppState, action: AppAction): AppState;
 }
 
 function expendituresFilter(expenditures: Expenditure[], filters: string[]) {
@@ -40,16 +54,18 @@ function expendituresFilter(expenditures: Expenditure[], filters: string[]) {
   );
 }
 
+
 const reducer: AppReducer = (state, action) => {
   switch (action.type) {
-    case "TOGGLE_FILTER":
+    case ActionTypes.ToggleFilter:
       const filter = action.payload;
       const { filters } = state;
       const index = filters.indexOf(filter);
 
-      let newFilters = [];
+      let newFilters = [...filters];
       if (index === -1) {
         newFilters = [...filters, filter];
+        newFilters.push(filter);
       } else {
         newFilters = [...filters];
         newFilters.splice(index, 1);
@@ -58,13 +74,13 @@ const reducer: AppReducer = (state, action) => {
         ...state,
         filters: newFilters,
       };
-    case SET_EXPENDITURES:
+    case ActionTypes.SetExpenditures:
       const newExpenditures = action.payload;
       return {
         ...state,
         expenditures: newExpenditures,
       }
-    case SET_FILTERED_EXPENDITURES:
+    case ActionTypes.SetFilteredExpenditures:
       return {
         ...state,
         filteredExpenditures: expendituresFilter(
@@ -109,8 +125,8 @@ function App() {
         baseDate.getMonth()
       )
       .then(expenditures => {
-        dispatch({ type: SET_EXPENDITURES, payload: expenditures });
-        dispatch({ type: SET_FILTERED_EXPENDITURES });
+        dispatch({ type: ActionTypes.SetExpenditures, payload: expenditures });
+        dispatch({ type: ActionTypes.SetFilteredExpenditures });
       });
   }, [baseDate, filters]);
 
@@ -133,8 +149,8 @@ function App() {
         <TotalReport data={filteredExpenditures}
                      filters={filters}
                      setFilters={(filter: ExpenseType) => {
-                       dispatch({ type: TOGGLE_FILTER, payload: filter});
-                       dispatch({ type: SET_FILTERED_EXPENDITURES });
+                       dispatch({ type: ActionTypes.ToggleFilter, payload: filter});
+                       dispatch({ type: ActionTypes.SetFilteredExpenditures });
                      }} />
       </Calendar>
       <Modal isShowing={isShowing}
