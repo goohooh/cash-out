@@ -32,7 +32,7 @@ describe("render navigator properly", () => {
 
 function renderCalendarNavigator(props: Partial<Props> = {}) {
     const defaultProps: Props = {
-      baseDate: new Date,
+      baseDate: new Date(),
       onClickNextMonth: () => {},
       onClickPrevMonth: () => {},
     };
