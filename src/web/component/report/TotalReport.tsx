@@ -9,6 +9,9 @@ const sumAllAmount = (total: number = 0, expenditure: Expenditure) => {
   return total;
 };
 
+const typeFilter = (type: ExpenseType) => (expenditure: Expenditure) =>
+    expenditure.type === type;
+
 export interface TotalReportProps {
   data: Expenditure[];
   filters: string[];
@@ -18,16 +21,16 @@ export interface TotalReportProps {
 const TotalReport = ({ data, filters, setFilters }: TotalReportProps) => {
   // Todo: Generic과 무엇을 사용하면 filter의 콜백을 추출할 수 있을까
   const taxTotal: number = data
-    .filter((expenditure: Expenditure) => expenditure.type === ExpenseType.tax)
+    .filter(typeFilter(ExpenseType.tax))
     .reduce(sumAllAmount, 0);
   const utilityBillTotal: number = data
-    .filter((expenditure: Expenditure) => expenditure.type === ExpenseType.utilityBill)
+    .filter(typeFilter(ExpenseType.utilityBill))
     .reduce(sumAllAmount, 0);
   const cardBillTotal: number = data
-    .filter((expenditure: Expenditure) => expenditure.type === ExpenseType.card)
+    .filter(typeFilter(ExpenseType.card))
     .reduce(sumAllAmount, 0);
   const tradePayableTotal: number = data
-    .filter((expenditure: Expenditure) => expenditure.type === ExpenseType.tradePayable)
+    .filter(typeFilter(ExpenseType.tradePayable))
     .reduce(sumAllAmount, 0);
   
   const expenditureTotal = taxTotal + utilityBillTotal + cardBillTotal + tradePayableTotal;
