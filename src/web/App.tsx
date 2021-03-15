@@ -97,16 +97,16 @@ interface AppState {
   expenditures: Expenditure[],
   filteredExpenditures: Expenditure[],
   filters: ExpenseType[],
-  baseDate: Date,
-  selectedDate: Date | null,
+  // baseDate: Date,
+  // selectedDate: Date | null,
 }
 
 const initialAppState: AppState = {
   expenditures: [],
   filteredExpenditures: [],
   filters: [],
-  baseDate: _baseDate,
-  selectedDate: null,
+  // baseDate: _baseDate,
+  // selectedDate: null,
 }
 
 function App() {
