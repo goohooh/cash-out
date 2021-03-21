@@ -1,6 +1,9 @@
 import React, { createContext, useReducer } from "react";
 import Expenditure, { ExpenseType } from "../../entity/model/expenditure";
 
+/**
+ * Todo: 상태/로직/액션이 더 복잡해지면 파일 분리
+ */
 export enum ActionTypes {
   ToggleFilter,
   SetExpenditures,
@@ -28,7 +31,6 @@ function expendituresFilter(expenditures: Expenditure[], filters: string[]) {
     !filters.some(filter => filter === expenditure.type)
   );
 }
-
 
 const reducer: AppReducer = (state, action) => {
   switch (action.type) {
