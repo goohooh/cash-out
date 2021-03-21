@@ -78,12 +78,23 @@ const initialAppState: AppState = {
   filters: [],
 }
 
+interface InitialValue {
+  expenditures?: Expenditure[],
+  filteredExpenditures?: Expenditure[],
+  filters?: ExpenseType[],
+}
+
 export const storeContext = createContext({ state: initialAppState, dispatch: (action: AppAction) => {} });
 
 const { Provider } = storeContext;
 
-export const StoreProvider = ({ children }: { children: React.ReactNode }) => {
-  const [state, dispatch] = useReducer(reducer, initialAppState);
+export const StoreProvider = ({
+  children, initialValue = {}
+}: {
+  children: React.ReactNode,
+  initialValue?: InitialValue,
+}) => {
+  const [state, dispatch] = useReducer(reducer, { ...initialAppState, ...initialValue });
   return (
       <Provider value={{ state, dispatch }}>
         {children}

@@ -1,11 +1,11 @@
-import { useEffect, useState, useMemo, useCallback, useReducer } from "react";
+import { useEffect, useState, useMemo, useCallback, useContext } from "react";
 import useModal from "./hook/useModal";
+import { storeContext } from "./store";
 import { startOfMonth } from "date-fns";
 
 import "./App.css";
 import "./Fontawesome";
 
-import Expenditure, { ExpenseType } from "../entity/model/expenditure";
 import Schedule from "../entity/model/schedule";
 import { expenditureToSchedule } from "./common/transfer";
 import ExpenditureMockAPI from "../data/expenditureMockAPI";
@@ -15,6 +15,7 @@ import TotalReport from "./component/report/TotalReport";
 import Calendar from "./component/calendar/Calendar";
 import Modal from "./component/modal/Modal";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { ActionTypes } from "./store";
 
 const expenditureRepo: ExpenditureRepo = new ExpenditureMockAPI();
 
@@ -26,97 +27,13 @@ const _baseDate = year && month
   ? new Date(year, month - 1, 1)
   : startOfMonth(new Date());
 
-enum ActionTypes {
-  ToggleFilter,
-  SetExpenditures,
-  SetFilteredExpenditures,
-}
-
-type AppAction = {
-  type : ActionTypes.ToggleFilter
-  payload : ExpenseType,
-}
-| {
-  type : ActionTypes.SetExpenditures,
-  payload: Expenditure[],
-}
-| {
-  type : ActionTypes.SetFilteredExpenditures,
-}
-
-interface AppReducer {
-  (state: AppState, action: AppAction): AppState;
-}
-
-function expendituresFilter(expenditures: Expenditure[], filters: string[]) {
-  return expenditures.filter(expenditure =>
-    !filters.some(filter => filter === expenditure.type)
-  );
-}
-
-
-const reducer: AppReducer = (state, action) => {
-  switch (action.type) {
-    case ActionTypes.ToggleFilter:
-      const filter = action.payload;
-      const { filters } = state;
-      const index = filters.indexOf(filter);
-
-      let newFilters = [...filters];
-      if (index === -1) {
-        newFilters = [...filters, filter];
-        newFilters.push(filter);
-      } else {
-        newFilters = [...filters];
-        newFilters.splice(index, 1);
-      }
-      return {
-        ...state,
-        filters: newFilters,
-      };
-    case ActionTypes.SetExpenditures:
-      const newExpenditures = action.payload;
-      return {
-        ...state,
-        expenditures: newExpenditures,
-      }
-    case ActionTypes.SetFilteredExpenditures:
-      return {
-        ...state,
-        filteredExpenditures: expendituresFilter(
-          state.expenditures,
-          state.filters
-        ),
-      }
-    default:
-      return state;
-  }
-}
-
-interface AppState {
-  expenditures: Expenditure[],
-  filteredExpenditures: Expenditure[],
-  filters: ExpenseType[],
-  // baseDate: Date,
-  // selectedDate: Date | null,
-}
-
-const initialAppState: AppState = {
-  expenditures: [],
-  filteredExpenditures: [],
-  filters: [],
-  // baseDate: _baseDate,
-  // selectedDate: null,
-}
-
 function App() {
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [baseDate, setDate] = useState<Date>(_baseDate);
-
   const { isShowing, toggleModal } = useModal();
 
-  const [state, dispatch] = useReducer(reducer, initialAppState);
-  const { filteredExpenditures, filters } = state;
+  const { state, dispatch } = useContext(storeContext);
+  const { filteredExpenditures } = state;
 
   useEffect(() => {
     expenditureRepo
@@ -128,7 +45,7 @@ function App() {
         dispatch({ type: ActionTypes.SetExpenditures, payload: expenditures });
         dispatch({ type: ActionTypes.SetFilteredExpenditures });
       });
-  }, [baseDate, filters]);
+  }, [baseDate, dispatch]);
 
   const schedules: Schedule[] = useMemo(() => {
     return expenditureToSchedule(filteredExpenditures);
@@ -146,12 +63,7 @@ function App() {
                 setBaseDate={setDate}
                 data={schedules}
                 onClickCell={onClickCell}>
-        <TotalReport data={filteredExpenditures}
-                     filters={filters}
-                     setFilters={(filter: ExpenseType) => {
-                       dispatch({ type: ActionTypes.ToggleFilter, payload: filter});
-                       dispatch({ type: ActionTypes.SetFilteredExpenditures });
-                     }} />
+        <TotalReport />
       </Calendar>
       <Modal isShowing={isShowing}
              hide={toggleModal}
