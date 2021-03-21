@@ -1,3 +1,7 @@
+import { useContext } from "react";
+
+import { storeContext, ActionTypes } from "../../store";
+
 import Expenditure, { ExpenseType } from "../../../entity/model/expenditure";
 import { ExpenseTypeColorMap } from "../../../entity/structure/expenseTypeColorMap";
 import styles from "./TotalReport.module.css";
@@ -9,46 +13,43 @@ const sumAllAmount = (total: number = 0, expenditure: Expenditure) => {
   return total;
 };
 
-export interface TotalReportProps {
-  data: Expenditure[];
-  filters: string[];
-  setFilters: (filter: string[]) => void;
-}
+const typeFilter = (type: ExpenseType) => (expenditure: Expenditure) =>
+    expenditure.type === type;
 
-const TotalReport = ({ data, filters, setFilters }: TotalReportProps) => {
+const TotalReport = () => {
+  const { state, dispatch } = useContext(storeContext);
+  const { filters, filteredExpenditures } = state;
+
   // Todo: Generic과 무엇을 사용하면 filter의 콜백을 추출할 수 있을까
-  const taxTotal: number = data
-    .filter((expenditure: Expenditure) => expenditure.type === ExpenseType.tax)
+  const taxTotal: number = filteredExpenditures
+    .filter(typeFilter(ExpenseType.tax))
     .reduce(sumAllAmount, 0);
-  const utilityBillTotal: number = data
-    .filter((expenditure: Expenditure) => expenditure.type === ExpenseType.utilityBill)
+  const utilityBillTotal: number = filteredExpenditures
+    .filter(typeFilter(ExpenseType.utilityBill))
     .reduce(sumAllAmount, 0);
-  const cardBillTotal: number = data
-    .filter((expenditure: Expenditure) => expenditure.type === ExpenseType.card)
+  const cardBillTotal: number = filteredExpenditures
+    .filter(typeFilter(ExpenseType.card))
     .reduce(sumAllAmount, 0);
-  const tradePayableTotal: number = data
-    .filter((expenditure: Expenditure) => expenditure.type === ExpenseType.tradePayable)
+  const tradePayableTotal: number = filteredExpenditures
+    .filter(typeFilter(ExpenseType.tradePayable))
     .reduce(sumAllAmount, 0);
   
   const expenditureTotal = taxTotal + utilityBillTotal + cardBillTotal + tradePayableTotal;
-  const filterSet = new Set(filters);
 
-  const toggleFilter = (filter: string) => {
-    const index = filters.indexOf(filter);
-    if (index === -1) {
-      setFilters([...filters, filter]);
-    } else {
-      const newFilters = [...filters];
-      newFilters.splice(index, 1);
-      setFilters(newFilters)
-    }
+  const filterSet = new Set(filters);
+  const setFilters = (filter: ExpenseType) => {
+    dispatch({ type: ActionTypes.ToggleFilter, payload: filter});
+    dispatch({ type: ActionTypes.SetFilteredExpenditures });
   }
 
   return (
     <div>
       <ul className={`${styles.container} flex flex-wrap`}>
         <li className={styles.category}
-            onClick={() => toggleFilter(ExpenseType.utilityBill)}>
+            onClick={(e) => {
+              e.stopPropagation();
+              setFilters(ExpenseType.utilityBill)
+            }}>
             <CategoryBox color={ExpenseTypeColorMap.utilityBill.colorLight}
                          label="공과금"
                          amount={utilityBillTotal}
@@ -56,7 +57,7 @@ const TotalReport = ({ data, filters, setFilters }: TotalReportProps) => {
         </li>
 
         <li className={styles.category}
-            onClick={() => toggleFilter(ExpenseType.tax)}>
+            onClick={() => setFilters(ExpenseType.tax)}>
             <CategoryBox color={ExpenseTypeColorMap.tax.color}
                          label="세금"
                          amount={taxTotal}
@@ -64,7 +65,7 @@ const TotalReport = ({ data, filters, setFilters }: TotalReportProps) => {
         </li>
 
         <li className={styles.category}
-            onClick={() => toggleFilter(ExpenseType.card)}>
+            onClick={() => setFilters(ExpenseType.card)}>
             <CategoryBox color={ExpenseTypeColorMap.card.color}
                          label="카드 청구액"
                          amount={cardBillTotal}
@@ -72,7 +73,7 @@ const TotalReport = ({ data, filters, setFilters }: TotalReportProps) => {
         </li>
 
         <li className={styles.category}
-            onClick={() => toggleFilter(ExpenseType.tradePayable)}>
+            onClick={() => setFilters(ExpenseType.tradePayable)}>
             <CategoryBox color={ExpenseTypeColorMap.tradePayable.color}
                          label="거래처대금"
                          amount={tradePayableTotal}

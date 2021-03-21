@@ -1,12 +1,14 @@
 import { render, screen, waitFor, fireEvent } from '@testing-library/react';
-import TotalReport, { TotalReportProps } from './TotalReport';
+import TotalReport from './TotalReport';
+import { StoreProvider } from "../../store";
 
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faCheckSquare } from '@fortawesome/free-solid-svg-icons';
+import { faSquare } from '@fortawesome/free-regular-svg-icons';
 import Expenditure, { ExpenseType } from '../../../entity/model/expenditure';
-import { numFormat } from "../../common/util";
 
 library.add(faCheckSquare);
+library.add(faSquare);
 
 jest
   .useFakeTimers('modern')
@@ -43,79 +45,47 @@ const mockData = [
   }),
 ];
 
-describe("Render total report properly", () => {
-  it("show total amount all", async () => {
-    renderTotalReport({ data: mockData });
+describe("필터링 조건에 맞게 총 금액 출력", () => {
+  it("출금 항목 클릭시 각 항목 토글하여 총 출금액에 반영", async () => {
+    renderTotalReport();
 
-    const totalAmount = await screen.findByText(`${numFormat(1600)}원`);
+    expect(screen.getByText("1,600원")).toBeInTheDocument();
 
+    fireEvent.click(screen.getByText("공과금"));
     await waitFor(() => {
-      expect(totalAmount).toBeInTheDocument();
-    });
-  });
-
-  it("show total amount without utility bill", async () => {
-    renderTotalReport({
-      data: mockData.filter(
-        (exp: Expenditure) => exp.type !== ExpenseType.utilityBill
-      )
+      expect(screen.getByText("900원")).toBeInTheDocument();
     });
 
-    const totalAmount = await screen.findByText(`${numFormat(900)}원`);
-
+    fireEvent.click(screen.getByText("거래처대금"));
     await waitFor(() => {
-      expect(totalAmount).toBeInTheDocument();
-    });
-  });
-
-  it("show total amount without tax", async () => {
-    renderTotalReport({
-      data: mockData.filter(
-        (exp: Expenditure) => exp.type !== ExpenseType.tax
-      )
+      expect(screen.getByText("400원")).toBeInTheDocument();
     });
 
-    const totalAmount = await screen.findByText(`${numFormat(1500)}원`);
-
+    fireEvent.click(screen.getByText("공과금"));
     await waitFor(() => {
-      expect(totalAmount).toBeInTheDocument();
-    });
-  });
-
-  it("show total amount without card", async () => {
-    renderTotalReport({
-      data: mockData.filter(
-        (exp: Expenditure) => exp.type !== ExpenseType.card
-      )
+      expect(screen.getByText("1,100원")).toBeInTheDocument();
     });
 
-    const totalAmount = await screen.findByText(`${numFormat(1300)}원`);
-
+    fireEvent.click(screen.getByText("카드 청구액"));
     await waitFor(() => {
-      expect(totalAmount).toBeInTheDocument();
-    });
-  });
-
-  it("show total amount without trade payable", async () => {
-    renderTotalReport({
-      data: mockData.filter(
-        (exp: Expenditure) => exp.type !== ExpenseType.tradePayable
-      )
+      expect(screen.getByText("800원")).toBeInTheDocument();
     });
 
-    const totalAmount = await screen.findByText(`${numFormat(1100)}원`);
-
+    fireEvent.click(screen.getByText("세금"));
+    fireEvent.click(screen.getByText("거래처대금"));
     await waitFor(() => {
-      expect(totalAmount).toBeInTheDocument();
+      expect(screen.getByText("1,200원")).toBeInTheDocument();
     });
   });
 });
 
-function renderTotalReport(props: Partial<TotalReportProps> = {}) {
-  const defaultProps: TotalReportProps = {
-    data: [],
-    filters: [],
-    setFilters: () => {},
-  };
-  return render(<TotalReport {...defaultProps} {...props} />);
+function renderTotalReport() {
+  return render(
+    <StoreProvider initialValue={{
+      expenditures: mockData,
+      filteredExpenditures: mockData
+    }}>
+      <TotalReport />
+    </StoreProvider>
+  );
 }

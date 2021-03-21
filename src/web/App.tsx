@@ -1,11 +1,11 @@
-import { useEffect, useState, useMemo, useCallback } from "react";
+import { useEffect, useState, useMemo, useCallback, useContext } from "react";
 import useModal from "./hook/useModal";
+import { storeContext } from "./store";
 import { startOfMonth } from "date-fns";
 
 import "./App.css";
 import "./Fontawesome";
 
-import Expenditure from "../entity/model/expenditure";
 import Schedule from "../entity/model/schedule";
 import { expenditureToSchedule } from "./common/transfer";
 import ExpenditureMockAPI from "../data/expenditureMockAPI";
@@ -15,6 +15,7 @@ import TotalReport from "./component/report/TotalReport";
 import Calendar from "./component/calendar/Calendar";
 import Modal from "./component/modal/Modal";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { ActionTypes } from "./store";
 
 const expenditureRepo: ExpenditureRepo = new ExpenditureMockAPI();
 
@@ -27,12 +28,12 @@ const _baseDate = year && month
   : startOfMonth(new Date());
 
 function App() {
-  const [expenditures, setExpenditures] = useState<Expenditure[]>([]);
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [baseDate, setDate] = useState<Date>(_baseDate);
-  const [filters, setFilters] = useState<string[]>([]);
-
   const { isShowing, toggleModal } = useModal();
+
+  const { state, dispatch } = useContext(storeContext);
+  const { filteredExpenditures } = state;
 
   useEffect(() => {
     expenditureRepo
@@ -41,17 +42,14 @@ function App() {
         baseDate.getMonth()
       )
       .then(expenditures => {
-        setExpenditures(
-          expenditures.filter(expenditure =>
-            !filters.some(filter => filter === expenditure.type)
-          )
-        );
+        dispatch({ type: ActionTypes.SetExpenditures, payload: expenditures });
+        dispatch({ type: ActionTypes.SetFilteredExpenditures });
       });
-  }, [baseDate, filters]);
+  }, [baseDate, dispatch]);
 
   const schedules: Schedule[] = useMemo(() => {
-    return expenditureToSchedule(expenditures);
-  }, [expenditures]);
+    return expenditureToSchedule(filteredExpenditures);
+  }, [filteredExpenditures]);
 
   const onClickCell = useCallback((date: Date) => {
     setSelectedDate(date);
@@ -65,14 +63,12 @@ function App() {
                 setBaseDate={setDate}
                 data={schedules}
                 onClickCell={onClickCell}>
-        <TotalReport data={expenditures}
-                     filters={filters}
-                     setFilters={setFilters} />
+        <TotalReport />
       </Calendar>
       <Modal isShowing={isShowing}
              hide={toggleModal}
              selectedDate={selectedDate}
-             data={expenditures} />
+             data={filteredExpenditures} />
       <div className="notice">
         <p>
           <FontAwesomeIcon icon="info-circle" className="m-right-smallest" />
