@@ -1,5 +1,5 @@
 import { render, screen, waitFor, fireEvent } from '@testing-library/react';
-import TotalReport, { TotalReportProps } from './TotalReport';
+import TotalReport from './TotalReport';
 import { StoreProvider, storeContext } from "../../store";
 
 import { library } from '@fortawesome/fontawesome-svg-core';
