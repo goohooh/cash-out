@@ -1,12 +1,11 @@
 import { render, screen, waitFor, fireEvent } from '@testing-library/react';
 import TotalReport from './TotalReport';
-import { StoreProvider, storeContext } from "../../store";
+import { StoreProvider } from "../../store";
 
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faCheckSquare } from '@fortawesome/free-solid-svg-icons';
 import { faSquare } from '@fortawesome/free-regular-svg-icons';
 import Expenditure, { ExpenseType } from '../../../entity/model/expenditure';
-import { numFormat } from "../../common/util";
 
 library.add(faCheckSquare);
 library.add(faSquare);
