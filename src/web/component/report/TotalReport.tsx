@@ -2,8 +2,8 @@ import { useContext } from "react";
 
 import { storeContext, ActionTypes } from "../../store";
 
-import Expenditure, { ExpenseType } from "../../../entity/model/expenditure";
-import { ExpenseTypeColorMap } from "../../../entity/structure/expenseTypeColorMap";
+import Expenditure, { ExpenseType } from "../../../domain/entity/expenditure";
+import { ExpenseTypeColorMap } from "../../../domain/value-object/expenseTypeColorMap";
 import styles from "./TotalReport.module.css";
 import { numFormat } from "../../common/util";
 import CategoryBox from "./CategoryBox";
@@ -33,7 +33,9 @@ const TotalReport = () => {
   const tradePayableTotal: number = filteredExpenditures
     .filter(typeFilter(ExpenseType.tradePayable))
     .reduce(sumAllAmount, 0);
-  
+ 
+  // 아래 한줄로 모든 로직 해결
+  // const [schedule, setSchedule] = useState(usecase.getThisMonthAnalytics(options)); 
   const expenditureTotal = taxTotal + utilityBillTotal + cardBillTotal + tradePayableTotal;
 
   const filterSet = new Set(filters);

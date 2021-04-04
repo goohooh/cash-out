@@ -6,10 +6,10 @@ import { startOfMonth } from "date-fns";
 import "./App.css";
 import "./Fontawesome";
 
-import Schedule from "../entity/model/schedule";
+import Schedule from "../domain/entity/schedule";
 import { expenditureToSchedule } from "./common/transfer";
-import ExpenditureMockAPI from "../data/expenditureMockAPI";
-import ExpenditureRepo from "../repo/ExpenditureRepo";
+import ExpenditureMockAPI from "../adapter/expenditureMockAPI";
+import ExpenditureRepo from "../domain/repo/ExpenditureRepo";
 
 import TotalReport from "./component/report/TotalReport";
 import Calendar from "./component/calendar/Calendar";
@@ -28,6 +28,7 @@ const _baseDate = year && month
   : startOfMonth(new Date());
 
 function App() {
+  
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [baseDate, setDate] = useState<Date>(_baseDate);
   const { isShowing, toggleModal } = useModal();
@@ -47,6 +48,7 @@ function App() {
       });
   }, [baseDate, dispatch]);
 
+  
   const schedules: Schedule[] = useMemo(() => {
     return expenditureToSchedule(filteredExpenditures);
   }, [filteredExpenditures]);

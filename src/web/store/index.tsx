@@ -1,5 +1,5 @@
 import React, { createContext, useReducer } from "react";
-import Expenditure, { ExpenseType } from "../../entity/model/expenditure";
+import Expenditure, { ExpenseType } from "../../domain/entity/expenditure";
 
 /**
  * Todo: 상태/로직/액션이 더 복잡해지면 파일 분리

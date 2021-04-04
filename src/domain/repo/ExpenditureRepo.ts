@@ -1,4 +1,4 @@
-import Expenditure from "../entity/model/expenditure";
+import Expenditure from "../entity/expenditure";
 
 interface ExpenditureRepo {
     getExpenditures(year: number, month: number): Promise<Expenditure[]>

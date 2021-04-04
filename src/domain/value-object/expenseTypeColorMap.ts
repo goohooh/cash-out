@@ -1,4 +1,4 @@
-import { ExpenseType } from "../model/expenditure";
+import { ExpenseType } from "../entity/expenditure";
 
 export interface Color {
   color: string,

@@ -1,6 +1,6 @@
-import ExpenditureRepo from "../repo/ExpenditureRepo";
-import Expenditure from "../entity/model/expenditure";
-import mockData from "./data.json";
+import ExpenditureRepo from "../domain/repo/ExpenditureRepo";
+import Expenditure from "../domain/entity/expenditure";
+import mockData from "../data/data.json";
 
 export default class ExpenditureMockAPI implements ExpenditureRepo {
     getExpenditures(year: number, month: number): Promise<Expenditure[]> {

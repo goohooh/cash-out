@@ -10,7 +10,7 @@ import {
   format,
 } from "date-fns";
 
-import Schedule from "../../../entity/model/schedule";
+import Schedule from "../../../domain/entity/schedule";
 import { groupBy } from "../../common/util";
 
 import CalendarNavigator from "./CalendarNavigator";
@@ -40,6 +40,25 @@ const Calendar = React.memo(({
   const onClickNextMonth = () => {
     setBaseDate(addMonths(baseDate, 1));
   }
+
+  // - 컴포넌트가 상태를 최소화한다.
+  // 1. component는 use case에게 전달할 인자들을 들고(알고)있다. - input port
+  // 2. usecase는 유저의 입력에 따라 새로운 값을 리턴하고 - interactor를 호출한다 with input port
+  // 3. 리턴된 값은 UI를 다시 렌더링 한다 ->  output port가 re-rendering
+  /*
+  const usecase = new CalendarUseCase(
+    expenditureRepo,
+    repo,
+    repo,
+  )
+
+  class usecase {
+    m() {}
+    m1() {}
+  }
+  const [schedule, setSchedule] = useState([]);
+  setSchedule
+  */
 
   const endOfMonthDate: Date = endOfMonth(baseDate);
 

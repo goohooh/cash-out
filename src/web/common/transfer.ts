@@ -1,6 +1,6 @@
-import Schedule from "../../entity/model/schedule";
-import Expenditure from "../../entity/model/expenditure";
-import { ExpenseTypeColorMap } from "../../entity/structure/expenseTypeColorMap";
+import Schedule from "../../domain/entity/schedule";
+import Expenditure from "../../domain/entity/expenditure";
+import { ExpenseTypeColorMap } from "../../domain/value-object/expenseTypeColorMap";
 
 import { format, eachDayOfInterval } from "date-fns";
 import { numFormat } from "./util";

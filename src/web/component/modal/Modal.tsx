@@ -1,6 +1,6 @@
 import { FC } from "react";
 import { useMemo } from "react";
-import Expenditure from "../../../entity/model/expenditure";
+import Expenditure from "../../../domain/entity/expenditure";
 import styles from "./Modal.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { format } from "date-fns";
